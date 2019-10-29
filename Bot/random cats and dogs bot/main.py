@@ -4,7 +4,7 @@ import re
 from telegram.ext.dispatcher import run_async
 import logging
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 logging.info('lets start this new adventure')
 
 def get_dog_url():
@@ -39,7 +39,7 @@ def meow(bot, update):
     url = get_cat_image_url()
     chat_id = update.message.chat_id
     bot.send_photo(chat_id=chat_id, photo=url)
-    print('sending a lil meow')
+    logging.info('sending a lil meow')
 
 def get_cat_gif_url():
     file_extension = ''
@@ -53,7 +53,7 @@ def meow_gif (bot, update):
     url = get_cat_gif_url()
     chat_id = update.message.chat_id
     bot.send_document(chat_id = chat_id, document = url)
-    print('sending a cat gif')
+    logging.info('sending a cat gif')
 
 
 def get_dog_gif_url():
@@ -68,14 +68,14 @@ def woof_gif (bot, update):
     url = get_dog_gif_url()
     chat_id = update.message.chat_id
     bot.send_document(chat_id = chat_id, document = url)
-    print('sending a dog gif')
+    logging.info('sending a dog gif')
 
 @run_async
 def woof(bot, update):
     url = get_dog_image_url()
     chat_id = update.message.chat_id
     bot.send_photo(chat_id=chat_id, photo=url)
-    print('sending a cute doggo')
+    logging.info('sending a cute doggo')
 
 
 def main():
@@ -91,7 +91,7 @@ def main():
     updater = Updater(TOKEN, request_kwargs=REQUEST_KWARGS, workers= 20)
     dp = updater.dispatcher
 
-    logging.debug("started logger successfully")
+    logging.info("started logger successfully")
     dp.add_handler(CommandHandler('woof',woof))
 
 
