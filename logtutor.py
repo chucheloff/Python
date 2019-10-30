@@ -16,7 +16,6 @@ print('welcome to logger - bogger wtf is # NOTE: doing in here')
 # DEBUG = 10
 # NOTSET = 0
 
-0
 print('\nsetting NOTSET level\n')
 logging.basicConfig( level = logging.NOTSET )
 logging.warning('HeLP')
