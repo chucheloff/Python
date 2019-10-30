@@ -55,3 +55,5 @@ logging.debug('greta van fleet')
 logging.info('logging info level')
 logging.error('nice')
 logging.log(msg = 'just log, okay?', level = logging.NOTSET)
+
+# i see what you can do and its scary  but beautiful
