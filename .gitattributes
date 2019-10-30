@@ -1,2 +1,5 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+/Learning curve export-ignore
+/logtutor.py export-ignore
+/.gitattributes export-ignore
