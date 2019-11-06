@@ -1,0 +1,21 @@
+c:\users\punk\documents\visual studio 2012\Projects\Recept\Recept\bin\Release\Recept.exe.config
+c:\users\punk\documents\visual studio 2012\Projects\Recept\Recept\bin\Release\Recept.exe
+c:\users\punk\documents\visual studio 2012\Projects\Recept\Recept\bin\Release\Recept.pdb
+c:\users\punk\documents\visual studio 2012\Projects\Recept\Recept\obj\Release\Recept.csprojResolveAssemblyReference.cache
+c:\users\punk\documents\visual studio 2012\Projects\Recept\Recept\obj\Release\Recept.Form1.resources
+c:\users\punk\documents\visual studio 2012\Projects\Recept\Recept\obj\Release\Recept.Properties.Resources.resources
+c:\users\punk\documents\visual studio 2012\Projects\Recept\Recept\obj\Release\Recept.csproj.GenerateResource.Cache
+c:\users\punk\documents\visual studio 2012\Projects\Recept\Recept\obj\Release\Recept.exe
+c:\users\punk\documents\visual studio 2012\Projects\Recept\Recept\obj\Release\Recept.pdb
+C:\Users\chuch\Documents\Code\Recept\Recept\bin\Release\Recept.exe.config
+C:\Users\chuch\Documents\Code\Recept\Recept\bin\Release\Recept.exe
+C:\Users\chuch\Documents\Code\Recept\Recept\bin\Release\Recept.pdb
+C:\Users\chuch\Documents\Code\Recept\Recept\obj\Release\Recept.csprojAssemblyReference.cache
+C:\Users\chuch\Documents\Code\Recept\Recept\obj\Release\Recept.Form1.resources
+C:\Users\chuch\Documents\Code\Recept\Recept\obj\Release\Recept.Properties.Resources.resources
+C:\Users\chuch\Documents\Code\Recept\Recept\obj\Release\Recept.csproj.GenerateResource.cache
+C:\Users\chuch\Documents\Code\Recept\Recept\obj\Release\Recept.csproj.CoreCompileInputs.cache
+C:\Users\chuch\Documents\Code\Recept\Recept\obj\Release\Recept.exe
+C:\Users\chuch\Documents\Code\Recept\Recept\obj\Release\Recept.pdb
+C:\Users\chuch\Documents\Code\Recept\Recept\bin\Release\Tulpep.NotificationWindow.dll
+C:\Users\chuch\Documents\Code\Recept\Recept\obj\Release\Recept.csproj.CopyComplete

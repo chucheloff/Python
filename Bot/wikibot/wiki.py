@@ -10,9 +10,9 @@ import random
 
 query = ''
 music_related_syntax = ''
-f =  open('words_alpha.txt', encoding = 'UTF-8')
+f =  open('C://Users/Tom/Documents/Python/Bot/wikibot/words_alpha.txt', encoding = 'UTF-8')
 valid_words = f.read().split()
-f = open('query.txt', encoding = 'UTF-8')
+f = open('C://Users/Tom/Documents/Python/Bot/wikibot/query.txt', encoding = 'UTF-8')
 query = f.read()
 music_related_syntax = query.split('\n')
 print('searching for: ' + str(music_related_syntax))
