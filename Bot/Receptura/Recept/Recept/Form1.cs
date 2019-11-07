@@ -12,42 +12,28 @@ namespace Recept
     {
         List<string> peoples = new List<string>();
         int deputyCount = 0, prosecutorCount = 0, deputyCountExt = 0, prosecutorCountExt = 0;
-
+        string[] deputy_info = new string[10];
+        string[] prosecutor_info = new string[10];
+       
         public Form1()
         {
             InitializeComponent();
         }
-
-        public static void Test()
-        {
-            using (var image = Properties.Resources.PIVO_1)
-            using (var newImage = ScaleImage(image, 100, 100))
-            {
-                newImage.Save(@"C:\Users\chuch\Documents\Code\Recept\Recept\Resources\PIVO_2.png", ImageFormat.Png);
-            }
-        }
-
-        public static Image ScaleImage(Image image, int maxWidth, int maxHeight)
-        {
-            var ratioX = (double)maxWidth / image.Width;
-            var ratioY = (double)maxHeight / image.Height;
-            var ratio = Math.Min(ratioX, ratioY);
-
-            var newWidth = (int)(image.Width * ratio);
-            var newHeight = (int)(image.Height * ratio);
-
-            var newImage = new Bitmap(newWidth, newHeight);
-
-            using (var graphics = Graphics.FromImage(newImage))
-                graphics.DrawImage(image, 0, 0, newWidth, newHeight);
-
-            return newImage;
-        }
+    
 
         private void Form1_Load(object sender, EventArgs e)
         {
             try
             {
+                for (int i = 2; i < 10; i++)
+                {
+                    deputy_info[i] = "";
+                    prosecutor_info[i] = "";
+                }
+                deputy_info[0] = "зам";
+                deputy_info[1] = "-";
+                prosecutor_info[0] = "шеф";
+                prosecutor_info[1] = "-";
                 string pathFile = "Peoples.txt";
                 
                 if (System.IO.File.Exists(pathFile))
@@ -68,6 +54,8 @@ namespace Recept
 
                     listBoxDeputy.Items.Add("Прокурор");
                     listBoxProsecutor.Items.Add("Заместитель");
+
+                    
 
                     foreach (string people in peoples)
                     {
@@ -143,11 +131,13 @@ namespace Recept
 
             e.DrawFocusRectangle();
 
-            updateProsecutorCount();
+            UpdateProsecutorCount();
         }
+
 
         private void DeputyIsHere_CheckedChanged(object sender, EventArgs e)
         {
+            UpdateDeputyString(deputyIsHere.Checked);
             if (deputyIsHere.Checked)
             {
                 deputyIsHere.ForeColor = Color.Black;
@@ -165,8 +155,9 @@ namespace Recept
             }
         }
 
-        private void prosecutorIsHere_CheckedChanged(object sender, EventArgs e)
+        private void ProsecutorIsHere_CheckedChanged(object sender, EventArgs e)
         {
+            UpdateProsecutorString(prosecutorIsHere.Checked);
             if (prosecutorIsHere.Checked)
             {
                 prosecutorIsHere.ForeColor = Color.Black;
@@ -185,7 +176,7 @@ namespace Recept
             }
         }
 
-        private void deputyAtDinner_CheckedChanged(object sender, EventArgs e)
+        private void DeputyAtDinner_CheckedChanged(object sender, EventArgs e)
         {
             if (deputyAtDinner.Checked)
             {
@@ -200,7 +191,7 @@ namespace Recept
 
         }
 
-        private void prosecutorAtDinner_CheckedChanged(object sender, EventArgs e)
+        private void ProsecutorAtDinner_CheckedChanged(object sender, EventArgs e)
         {
             if (prosecutorAtDinner.Checked)
             {
@@ -215,6 +206,7 @@ namespace Recept
 
         }
 
+        
         // TextBox count (+1)
 
         private void RichTextBoxDeputy_TextChanged(object sender, EventArgs e)
@@ -259,9 +251,10 @@ namespace Recept
                 index = source.IndexOf(substring, index + 1);
 
             }
-            updateProsecutorCount();
+            UpdateProsecutorCount();
         }
 
+        
         // Count
         void UpdateDeputyCount()
         {
@@ -281,7 +274,7 @@ namespace Recept
             }
         }
 
-        void updateProsecutorCount()
+        void UpdateProsecutorCount()
         {
             prosecutorCount = listBoxProsecutor.SelectedItems.Count;
 
@@ -298,8 +291,9 @@ namespace Recept
             }
         }
 
+        
         // Check for intersect
-        private void listBoxDeputy_SelectedIndexChanged(object sender, EventArgs e)
+        private void ListBoxDeputy_SelectedIndexChanged(object sender, EventArgs e)
         {
             for (int i = 0; i < listBoxDeputy.Items.Count; i++)
             {
@@ -312,9 +306,19 @@ namespace Recept
                     listBoxProsecutor.SetSelected(i, false);
                 }
             }
+            string[] deputy_list = new string[8];
+            for (int i = 0; i < listBoxDeputy.SelectedItems.Count; i++)
+            {
+                if (i > 7)
+                {
+                    break;
+                }
+                deputy_list[i] = listBoxDeputy.SelectedItems[i].ToString();
+            }
+            UpdateDeputyString(deputy_list);
         }
 
-        private void listBoxProsecutor_SelectedIndexChanged(object sender, EventArgs e)
+        private void ListBoxProsecutor_SelectedIndexChanged(object sender, EventArgs e)
         {
             for (int i = 0; i < listBoxDeputy.Items.Count; i++)
             {
@@ -327,6 +331,82 @@ namespace Recept
                     listBoxDeputy.SetSelected(i, false);
                 }
             }
+            string[] prosecutor_list = new string[8];
+            for (int i = 0; i < listBoxProsecutor.SelectedItems.Count; i++)
+            {
+                if (i > 7)
+                {
+                    break;
+                }
+                prosecutor_list[i] = listBoxProsecutor.SelectedItems[i].ToString();
+            }
+            UpdateProsecutorString(prosecutor_list);
+        }
+
+        private void UpdateDeputyString(bool v)
+        {
+            if (v)
+            {
+                deputy_info[1] = "+";
+            }
+            else
+            {
+                deputy_info[1] = "-";
+            }
+            WriteFile();
+        }
+
+        private void UpdateDeputyString(string[] s)
+        {
+            for (int i = 2; i < 10; i++)
+            {
+                deputy_info[i] = s[i-2];
+            }
+            WriteFile();
+        }
+
+        private void UpdateProsecutorString(bool v)
+        {
+            if (v)
+            {
+                prosecutor_info[1] = "+";
+            }
+            else
+            {
+                prosecutor_info[1] = "-";
+            }
+            WriteFile();
+        }
+
+        private void UpdateProsecutorString(string[] s)
+        {
+            for (int i = 2; i < 10; i++)
+            {
+                prosecutor_info[i] = s[i-2];
+            }
+            WriteFile();
+        }
+
+        // compiles and writes to recept_info.txt updated 
+        // string from @deputy_info and @prosecutor_info arrays
+        // first (index = 0) element of arrays is "шеф" or "зам"
+        // second (index=1) element of arrays is "+" or "-" for checking if they're
+        // present on theirs' working places
+
+        private void WriteFile()
+        {
+            string final_string = "";
+            foreach (string word in deputy_info)
+            {
+
+                final_string += word + "\n";
+            }
+            foreach (string word in prosecutor_info)
+            {
+                final_string += word + "\n";
+            }
+            File.WriteAllText("recept_info.txt", final_string);
+            Console.WriteLine(final_string);
         }
 
     }

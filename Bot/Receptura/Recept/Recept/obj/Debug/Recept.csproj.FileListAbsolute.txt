@@ -1,1 +1,12 @@
 c:\users\punk\documents\visual studio 2012\Projects\Recept\Recept\bin\Debug\Recept.exe.config
+C:\Users\Tom\Documents\Python\Bot\Receptura\Recept\Recept\bin\Debug\Recept.exe.config
+C:\Users\Tom\Documents\Python\Bot\Receptura\Recept\Recept\bin\Debug\Recept.exe
+C:\Users\Tom\Documents\Python\Bot\Receptura\Recept\Recept\bin\Debug\Recept.pdb
+C:\Users\Tom\Documents\Python\Bot\Receptura\Recept\Recept\bin\Debug\Tulpep.NotificationWindow.dll
+C:\Users\Tom\Documents\Python\Bot\Receptura\Recept\Recept\obj\Debug\Recept.csprojAssemblyReference.cache
+C:\Users\Tom\Documents\Python\Bot\Receptura\Recept\Recept\obj\Debug\Recept.Form1.resources
+C:\Users\Tom\Documents\Python\Bot\Receptura\Recept\Recept\obj\Debug\Recept.Properties.Resources.resources
+C:\Users\Tom\Documents\Python\Bot\Receptura\Recept\Recept\obj\Debug\Recept.csproj.GenerateResource.cache
+C:\Users\Tom\Documents\Python\Bot\Receptura\Recept\Recept\obj\Debug\Recept.csproj.CopyComplete
+C:\Users\Tom\Documents\Python\Bot\Receptura\Recept\Recept\obj\Debug\Recept.exe
+C:\Users\Tom\Documents\Python\Bot\Receptura\Recept\Recept\obj\Debug\Recept.pdb

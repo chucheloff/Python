@@ -19,3 +19,14 @@ C:\Users\chuch\Documents\Code\Recept\Recept\obj\Release\Recept.exe
 C:\Users\chuch\Documents\Code\Recept\Recept\obj\Release\Recept.pdb
 C:\Users\chuch\Documents\Code\Recept\Recept\bin\Release\Tulpep.NotificationWindow.dll
 C:\Users\chuch\Documents\Code\Recept\Recept\obj\Release\Recept.csproj.CopyComplete
+C:\Users\Tom\Documents\Python\Bot\Receptura\Recept\Recept\bin\Release\Recept.exe.config
+C:\Users\Tom\Documents\Python\Bot\Receptura\Recept\Recept\bin\Release\Recept.exe
+C:\Users\Tom\Documents\Python\Bot\Receptura\Recept\Recept\bin\Release\Recept.pdb
+C:\Users\Tom\Documents\Python\Bot\Receptura\Recept\Recept\bin\Release\Tulpep.NotificationWindow.dll
+C:\Users\Tom\Documents\Python\Bot\Receptura\Recept\Recept\obj\Release\Recept.csprojAssemblyReference.cache
+C:\Users\Tom\Documents\Python\Bot\Receptura\Recept\Recept\obj\Release\Recept.Form1.resources
+C:\Users\Tom\Documents\Python\Bot\Receptura\Recept\Recept\obj\Release\Recept.Properties.Resources.resources
+C:\Users\Tom\Documents\Python\Bot\Receptura\Recept\Recept\obj\Release\Recept.csproj.GenerateResource.cache
+C:\Users\Tom\Documents\Python\Bot\Receptura\Recept\Recept\obj\Release\Recept.csproj.CopyComplete
+C:\Users\Tom\Documents\Python\Bot\Receptura\Recept\Recept\obj\Release\Recept.exe
+C:\Users\Tom\Documents\Python\Bot\Receptura\Recept\Recept\obj\Release\Recept.pdb

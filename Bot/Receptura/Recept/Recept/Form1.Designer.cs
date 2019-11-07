@@ -66,7 +66,6 @@
             "",
             "Кочергина",
             "Каташова",
-            "Завьялова",
             "Тарабарина"});
             this.listBoxDeputy.Location = new System.Drawing.Point(14, 63);
             this.listBoxDeputy.Name = "listBoxDeputy";
@@ -74,7 +73,7 @@
             this.listBoxDeputy.Size = new System.Drawing.Size(206, 360);
             this.listBoxDeputy.TabIndex = 1;
             this.listBoxDeputy.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.ListBoxDeputy_DrawItem);
-            this.listBoxDeputy.SelectedIndexChanged += new System.EventHandler(this.listBoxDeputy_SelectedIndexChanged);
+            this.listBoxDeputy.SelectedIndexChanged += new System.EventHandler(this.ListBoxDeputy_SelectedIndexChanged);
             // 
             // richTextBoxDeputy
             // 
@@ -147,7 +146,6 @@
             "",
             "Кочергина",
             "Каташова",
-            "Завьялова",
             "Тарабарина"});
             this.listBoxProsecutor.Location = new System.Drawing.Point(261, 63);
             this.listBoxProsecutor.Name = "listBoxProsecutor";
@@ -155,7 +153,7 @@
             this.listBoxProsecutor.Size = new System.Drawing.Size(206, 360);
             this.listBoxProsecutor.TabIndex = 9;
             this.listBoxProsecutor.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.ListBoxProsecutor_DrawItem);
-            this.listBoxProsecutor.SelectedIndexChanged += new System.EventHandler(this.listBoxProsecutor_SelectedIndexChanged);
+            this.listBoxProsecutor.SelectedIndexChanged += new System.EventHandler(this.ListBoxProsecutor_SelectedIndexChanged);
             // 
             // deputyIsHere
             // 
@@ -187,7 +185,7 @@
             this.prosecutorIsHere.TabIndex = 12;
             this.prosecutorIsHere.Text = "На месте";
             this.prosecutorIsHere.UseVisualStyleBackColor = true;
-            this.prosecutorIsHere.CheckedChanged += new System.EventHandler(this.prosecutorIsHere_CheckedChanged);
+            this.prosecutorIsHere.CheckedChanged += new System.EventHandler(this.ProsecutorIsHere_CheckedChanged);
             // 
             // deputyAtDinner
             // 
@@ -203,7 +201,7 @@
             this.deputyAtDinner.TabIndex = 13;
             this.deputyAtDinner.Text = "Обед";
             this.deputyAtDinner.UseVisualStyleBackColor = true;
-            this.deputyAtDinner.CheckedChanged += new System.EventHandler(this.deputyAtDinner_CheckedChanged);
+            this.deputyAtDinner.CheckedChanged += new System.EventHandler(this.DeputyAtDinner_CheckedChanged);
             // 
             // prosecutorAtDinner
             // 
@@ -219,7 +217,7 @@
             this.prosecutorAtDinner.TabIndex = 14;
             this.prosecutorAtDinner.Text = "Обед";
             this.prosecutorAtDinner.UseVisualStyleBackColor = true;
-            this.prosecutorAtDinner.CheckedChanged += new System.EventHandler(this.prosecutorAtDinner_CheckedChanged);
+            this.prosecutorAtDinner.CheckedChanged += new System.EventHandler(this.ProsecutorAtDinner_CheckedChanged);
             // 
             // labelDeputyCount
             // 
