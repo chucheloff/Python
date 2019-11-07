@@ -1,4 +1,4 @@
-from telegram.ext import Updater, InlineQueryHandler, CommandHandler
+﻿from telegram.ext import Updater, InlineQueryHandler, CommandHandler
 import telegram.bot
 import logging
 

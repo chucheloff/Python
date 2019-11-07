@@ -176,33 +176,43 @@ namespace Recept
             }
         }
 
+
+        // now those two are for arriving and leaving office, like, full-time
+
         private void DeputyAtDinner_CheckedChanged(object sender, EventArgs e)
         {
             if (deputyAtDinner.Checked)
             {
                 deputyAtDinner.ForeColor = Color.Black;
                 deputyAtDinner.BackColor = Color.LawnGreen;
+                WriteMoves("Заместитель приехал");
             }
             else
             {
                 deputyAtDinner.ForeColor = Color.LawnGreen;
                 deputyAtDinner.BackColor = Color.FromArgb(64, 64, 64);
+                WriteMoves("Заместитель уехал");
             }
 
         }
 
+        
         private void ProsecutorAtDinner_CheckedChanged(object sender, EventArgs e)
         {
             if (prosecutorAtDinner.Checked)
             {
                 prosecutorAtDinner.ForeColor = Color.Black;
                 prosecutorAtDinner.BackColor = Color.LawnGreen;
+                WriteMoves("Прокурор приехал");
             }
             else
             {
                 prosecutorAtDinner.ForeColor = Color.LawnGreen;
                 prosecutorAtDinner.BackColor = Color.FromArgb(64, 64, 64);
+                WriteMoves("Прокурор уехал");
             }
+
+
 
         }
 
@@ -393,6 +403,20 @@ namespace Recept
         // second (index=1) element of arrays is "+" or "-" for checking if they're
         // present on theirs' working places
 
+        // WriteMoves gets @info parameter which is either of four:
+        // - Заместитель уехал  - Заместитель уехал
+        // - Прокурор уехал     - Прокурор приехал
+        // and checks if it's already been written to the moves file, which is on
+        // 120 sec read delay in bot, after each reading it's being erased, so
+        // it's unlikely 
+
+        private void WriteMoves(string info)
+        {
+            string reader = File.ReadAllText("moves_info.txt");
+            reader +=info+' ';
+            File.WriteAllText("moves_info.txt", reader);
+        }
+
         private void WriteFile()
         {
             string final_string = "";
@@ -406,7 +430,6 @@ namespace Recept
                 final_string += word + "\n";
             }
             File.WriteAllText("recept_info.txt", final_string);
-            Console.WriteLine(final_string);
         }
 
     }
