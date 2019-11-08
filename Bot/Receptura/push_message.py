@@ -12,7 +12,7 @@ if words[0] == 'что':
 message = ''
 for word in words :
     message += word + ' '
-message = message[:len(message)-1]
+message = message[:len(message)-1] 
 message = message.capitalize()
 f = open('C:/Users/Tom/Documents/Python/Bot/Receptura/Recept/Recept/bin/Release/moves_info.txt','w', encoding='UTF-8')
 f.write(message+'\n')
