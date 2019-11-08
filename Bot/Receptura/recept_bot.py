@@ -5,9 +5,6 @@ import re
 from telegram.ext.dispatcher import run_async
 import logging
 import recept_reader
-import threading
-from time import sleep
-
 
 def kto_gde(bot, update):
     message = recept_reader.get_info()
@@ -63,7 +60,7 @@ def main():
             'password': 'is_blocked_hard',
         }
     }
-    updater = Updater(TOKEN, request_kwargs=REQUEST_KWARGS, workers=20)
+    updater = Updater(TOKEN, request_kwargs=REQUEST_KWARGS)
     dp = updater.dispatcher
     logging.basicConfig(level=logging.INFO)
     logging.info("started logger successfully")

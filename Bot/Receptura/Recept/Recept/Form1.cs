@@ -12,9 +12,14 @@ namespace Recept
     {
         List<string> peoples = new List<string>();
         int deputyCount = 0, prosecutorCount = 0, deputyCountExt = 0, prosecutorCountExt = 0;
-        string[] deputy_info = new string[10];
-        string[] prosecutor_info = new string[10];
-       
+        string[] deputy_info = new string[2];
+        string[] prosecutor_info = new string[2];
+        List<string> deputy_list_box = new List<string>();
+        List<string> prosecutor_list_box = new List<string>();
+        List<string> deputy_text_box = new List<string>();
+        List<string> prosecutor_text_box = new List<string>();
+
+
         public Form1()
         {
             InitializeComponent();
@@ -25,11 +30,6 @@ namespace Recept
         {
             try
             {
-                for (int i = 2; i < 10; i++)
-                {
-                    deputy_info[i] = "";
-                    prosecutor_info[i] = "";
-                }
                 deputy_info[0] = "зам";
                 deputy_info[1] = "-";
                 prosecutor_info[0] = "шеф";
@@ -238,7 +238,19 @@ namespace Recept
                 index = source.IndexOf(substring, index + 1);
                 
             }
-            
+
+            deputy_text_box = new List<string>();
+            string[] lines = source.Split('\n');
+            foreach (string line in lines)
+            {
+                string new_line = line.Replace("+", "");
+                for (int i = 0; i < 10; i++)
+                {
+                    new_line = line.Replace(i.ToString(), "");
+                }
+                deputy_text_box.Add(line);
+            }
+
             UpdateDeputyCount();
         }
 
@@ -259,8 +271,19 @@ namespace Recept
                 }
                 prosecutorCountExt += c;
                 index = source.IndexOf(substring, index + 1);
-
             }
+            prosecutor_text_box = new List<string>();
+            string[] lines = source.Split('\n');
+            foreach (string line in lines)
+            {
+                string new_line = line.Replace("+", "");
+                for (int i= 0; i<10; i++)
+                {
+                    new_line = line.Replace(i.ToString(),"");
+                }
+                prosecutor_text_box.Add(line);
+            }
+
             UpdateProsecutorCount();
         }
 
@@ -316,16 +339,11 @@ namespace Recept
                     listBoxProsecutor.SetSelected(i, false);
                 }
             }
-            string[] deputy_list = new string[8];
+            deputy_list_box = new List<string>();
             for (int i = 0; i < listBoxDeputy.SelectedItems.Count; i++)
             {
-                if (i > 7)
-                {
-                    break;
-                }
-                deputy_list[i] = listBoxDeputy.SelectedItems[i].ToString();
+                deputy_list_box.Add(listBoxDeputy.SelectedItems[i].ToString());
             }
-            UpdateDeputyString(deputy_list);
         }
 
         private void ListBoxProsecutor_SelectedIndexChanged(object sender, EventArgs e)
@@ -341,16 +359,11 @@ namespace Recept
                     listBoxDeputy.SetSelected(i, false);
                 }
             }
-            string[] prosecutor_list = new string[8];
+            prosecutor_list_box = new List<string>();
             for (int i = 0; i < listBoxProsecutor.SelectedItems.Count; i++)
             {
-                if (i > 7)
-                {
-                    break;
-                }
-                prosecutor_list[i] = listBoxProsecutor.SelectedItems[i].ToString();
+               prosecutor_list_box.Add(listBoxProsecutor.SelectedItems[i].ToString());
             }
-            UpdateProsecutorString(prosecutor_list);
         }
 
         private void UpdateDeputyString(bool v)
@@ -365,16 +378,6 @@ namespace Recept
             }
             WriteFile();
         }
-
-        private void UpdateDeputyString(string[] s)
-        {
-            for (int i = 2; i < 10; i++)
-            {
-                deputy_info[i] = s[i-2];
-            }
-            WriteFile();
-        }
-
         private void UpdateProsecutorString(bool v)
         {
             if (v)
@@ -388,14 +391,6 @@ namespace Recept
             WriteFile();
         }
 
-        private void UpdateProsecutorString(string[] s)
-        {
-            for (int i = 2; i < 10; i++)
-            {
-                prosecutor_info[i] = s[i-2];
-            }
-            WriteFile();
-        }
 
         // compiles and writes to recept_info.txt updated 
         // string from @deputy_info and @prosecutor_info arrays
@@ -412,9 +407,10 @@ namespace Recept
 
         private void WriteMoves(string info)
         {
-            string reader = File.ReadAllText("moves_info.txt");
-            reader += info + ' '; 
-            File.WriteAllText("moves_info.txt", reader);
+            string reader = File.ReadAllText("moves_info_test.txt");
+            reader += info + '\n';
+            reader = reader.Remove(reader.LastIndexOf('\n'),1);
+            File.WriteAllText("moves_info_test.txt", reader);
         }
 
         private void WriteFile()
@@ -422,14 +418,30 @@ namespace Recept
             string final_string = "";
             foreach (string word in deputy_info)
             {
-
                 final_string += word + "\n";
             }
+            foreach (string word in deputy_list_box)
+            {
+                final_string += word + "\n";
+            }
+            foreach (string word in deputy_text_box)
+            {
+                final_string += word + "\n";
+            }
+
             foreach (string word in prosecutor_info)
             {
                 final_string += word + "\n";
             }
-            File.WriteAllText("recept_info.txt", final_string);
+            foreach (string word in prosecutor_list_box)
+            {
+                final_string += word + "\n";
+            }
+            foreach (string word in prosecutor_text_box)
+            {
+                final_string += word + "\n";
+            }
+            File.WriteAllText("recept_info_test.txt", final_string);
         }
 
     }
