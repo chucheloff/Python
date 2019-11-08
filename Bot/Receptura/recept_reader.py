@@ -44,8 +44,9 @@ def get_info():
     if deputy_on_duty :
         deputy_result += 'на месте'
         if deputy_count == 0 : 
-            
-            deputy_result += ', у него никого'
+            deputy_result += ', у него никого\n'
+            for item in list_of_deputy:
+                deputy_result += item + '\n'
         else :
             deputy_result += ', у него ' + str(deputy_count) + ' чел'
             deputy_result += ':\n'
@@ -59,8 +60,9 @@ def get_info():
     if prosecutor_on_duty :
         prosecutor_result += 'на месте'
         if prosecutor_count == 0 : 
-            
-            prosecutor_result += ', у него никого'
+            prosecutor_result += ', у него никого\n'
+            for item in list_of_prosecutor:
+                prosecutor_result += item + '\n'
         else :
             prosecutor_result += ', у него ' + str(prosecutor_count) + ' чел'
             prosecutor_result += ':\n'
@@ -75,8 +77,7 @@ def get_info():
 
 def main():
     
-    logging.basicConfig(level=logging.DEBUG,
-                        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    logging.basicConfig(level=logging.DEBUG)
     message = get_info()
     print(str(message))
 
