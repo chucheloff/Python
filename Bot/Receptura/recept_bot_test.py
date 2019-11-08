@@ -43,6 +43,25 @@ def someone_left(bot, update):
     f = open('userbase.txt', 'r')
     userbase = f.read().split('\n')
     f.close()
+    logging.debug(str(moves))
+    last_deputy_move =''
+    last_prosecutor_move =''
+    
+    try:
+        index =len(moves) - 1 - moves[len(moves):0:-1].index("Заместитель")
+        logging.debug("Index of last deputy move is"+str(index))
+        last_deputy_move = moves[index] + ' ' +  moves[index+1]
+    except Exception as identifier:
+        pass
+
+    try:
+        index = len(moves) - 1  - moves[len(moves):0:-1].index("Прокурор")
+        logging.debug("Index of last prosecutor move is"+str(index))
+        last_prosecutor_move = moves[index] + ' ' + moves[index+1]
+    except Exception as identifier:
+        pass
+    
+    moves = [last_deputy_move, last_prosecutor_move]
     for move in moves:
         logging.info(move)
         for user in userbase:
@@ -69,7 +88,7 @@ def main():
     logging.info("started logger successfully")
     dp.add_handler(CommandHandler('kto_gde', kto_gde))
     job_queue = updater.job_queue
-    job_queue.run_repeating(someone_left, interval=120, first=5)
+    job_queue.run_repeating(someone_left, interval=120, first=0)
 
     updater.start_polling()
     updater.idle()

@@ -413,7 +413,7 @@ namespace Recept
         private void WriteMoves(string info)
         {
             string reader = File.ReadAllText("moves_info.txt");
-            reader +=info+' ';
+            reader += info + ' '; 
             File.WriteAllText("moves_info.txt", reader);
         }
 

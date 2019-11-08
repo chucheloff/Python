@@ -194,12 +194,12 @@
             this.deputyAtDinner.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.deputyAtDinner.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.deputyAtDinner.ForeColor = System.Drawing.Color.LawnGreen;
-            this.deputyAtDinner.Location = new System.Drawing.Point(151, 33);
+            this.deputyAtDinner.Location = new System.Drawing.Point(122, 33);
             this.deputyAtDinner.Name = "deputyAtDinner";
             this.deputyAtDinner.Padding = new System.Windows.Forms.Padding(4, 2, 2, 2);
-            this.deputyAtDinner.Size = new System.Drawing.Size(72, 28);
+            this.deputyAtDinner.Size = new System.Drawing.Size(108, 28);
             this.deputyAtDinner.TabIndex = 13;
-            this.deputyAtDinner.Text = "Обед";
+            this.deputyAtDinner.Text = "В конторе";
             this.deputyAtDinner.UseVisualStyleBackColor = true;
             this.deputyAtDinner.CheckedChanged += new System.EventHandler(this.DeputyAtDinner_CheckedChanged);
             // 
@@ -210,12 +210,12 @@
             this.prosecutorAtDinner.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.prosecutorAtDinner.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.prosecutorAtDinner.ForeColor = System.Drawing.Color.LawnGreen;
-            this.prosecutorAtDinner.Location = new System.Drawing.Point(398, 33);
+            this.prosecutorAtDinner.Location = new System.Drawing.Point(369, 32);
             this.prosecutorAtDinner.Name = "prosecutorAtDinner";
             this.prosecutorAtDinner.Padding = new System.Windows.Forms.Padding(4, 2, 2, 2);
-            this.prosecutorAtDinner.Size = new System.Drawing.Size(72, 28);
+            this.prosecutorAtDinner.Size = new System.Drawing.Size(108, 28);
             this.prosecutorAtDinner.TabIndex = 14;
-            this.prosecutorAtDinner.Text = "Обед";
+            this.prosecutorAtDinner.Text = "В конторе";
             this.prosecutorAtDinner.UseVisualStyleBackColor = true;
             this.prosecutorAtDinner.CheckedChanged += new System.EventHandler(this.ProsecutorAtDinner_CheckedChanged);
             // 
