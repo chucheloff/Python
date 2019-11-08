@@ -12,8 +12,8 @@ namespace Recept
     {
         List<string> peoples = new List<string>();
         int deputyCount = 0, prosecutorCount = 0, deputyCountExt = 0, prosecutorCountExt = 0;
-        string[] deputy_info = new string[2];
-        string[] prosecutor_info = new string[2];
+        string[] deputy_info = new string[3];
+        string[] prosecutor_info = new string[3];
         List<string> deputy_list_box = new List<string>();
         List<string> prosecutor_list_box = new List<string>();
         List<string> deputy_text_box = new List<string>();
@@ -238,19 +238,26 @@ namespace Recept
                 index = source.IndexOf(substring, index + 1);
                 
             }
-
+            int n;
             deputy_text_box = new List<string>();
             string[] lines = source.Split('\n');
             foreach (string line in lines)
             {
                 string new_line = line.Replace("+", "");
-                for (int i = 0; i < 10; i++)
-                {
-                    new_line = line.Replace(i.ToString(), "");
+                if (new_line.Length > 0) {
+                    while ((new_line[0] == ' ') || (int.TryParse(new_line[0].ToString(), out n) == true))
+                    {
+                        new_line = new_line.Substring(1);
+                        if (new_line.Length == 0)
+                        {
+                            break;
+                        }
+                    }
                 }
-                deputy_text_box.Add(line);
+                
+                deputy_text_box.Add(new_line);
             }
-
+            WriteFile();
             UpdateDeputyCount();
         }
 
@@ -272,17 +279,27 @@ namespace Recept
                 prosecutorCountExt += c;
                 index = source.IndexOf(substring, index + 1);
             }
+
             prosecutor_text_box = new List<string>();
             string[] lines = source.Split('\n');
+            int n;
             foreach (string line in lines)
             {
                 string new_line = line.Replace("+", "");
-                for (int i= 0; i<10; i++)
+                if (new_line.Length > 0)
                 {
-                    new_line = line.Replace(i.ToString(),"");
+                    while ((new_line[0] == ' ')  || (int.TryParse(new_line[0].ToString(), out n) == true))
+                    {
+                        new_line = new_line.Substring(1);
+                        if (new_line.Length == 0)
+                        {
+                            break;
+                        }
+                    }
                 }
-                prosecutor_text_box.Add(line);
+                prosecutor_text_box.Add(new_line);
             }
+            WriteFile();
 
             UpdateProsecutorCount();
         }
@@ -305,6 +322,8 @@ namespace Recept
                 labelDeputyCount.ForeColor = Color.FromArgb(25, 187, 155);
                 labelDeputyCount.BackColor = Color.FromArgb(64, 64, 64);
             }
+            deputy_info[2] = (deputyCount + deputyCountExt).ToString();
+            WriteFile();
         }
 
         void UpdateProsecutorCount()
@@ -322,6 +341,8 @@ namespace Recept
                 labelProsecutorCount.ForeColor = Color.FromArgb(25, 187, 155);
                 labelProsecutorCount.BackColor = Color.FromArgb(64, 64, 64);
             }
+            prosecutor_info[2] = (prosecutorCount + prosecutorCountExt).ToString();
+            WriteFile();
         }
 
         
@@ -344,6 +365,7 @@ namespace Recept
             {
                 deputy_list_box.Add(listBoxDeputy.SelectedItems[i].ToString());
             }
+            WriteFile();
         }
 
         private void ListBoxProsecutor_SelectedIndexChanged(object sender, EventArgs e)
@@ -364,6 +386,7 @@ namespace Recept
             {
                prosecutor_list_box.Add(listBoxProsecutor.SelectedItems[i].ToString());
             }
+            WriteFile();
         }
 
         private void UpdateDeputyString(bool v)
@@ -407,10 +430,9 @@ namespace Recept
 
         private void WriteMoves(string info)
         {
-            string reader = File.ReadAllText("moves_info_test.txt");
+            string reader = File.ReadAllText("moves_info.txt");
             reader += info + '\n';
-            reader = reader.Remove(reader.LastIndexOf('\n'),1);
-            File.WriteAllText("moves_info_test.txt", reader);
+            File.WriteAllText("moves_info.txt", reader);
         }
 
         private void WriteFile()
@@ -441,7 +463,7 @@ namespace Recept
             {
                 final_string += word + "\n";
             }
-            File.WriteAllText("recept_info_test.txt", final_string);
+            File.WriteAllText("recept_info.txt", final_string);
         }
 
     }

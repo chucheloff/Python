@@ -18,7 +18,8 @@ def get_info():
         deputy_on_duty = True
     else:
         deputy_on_duty = False
-    i = 2
+    deputy_count = int(s[2])
+    i = 3
 
     # getting names into local variables form recept_info
     while s[i] != 'шеф':
@@ -29,7 +30,8 @@ def get_info():
         prosecutor_on_duty = True
     else:
         prosecutor_on_duty = False
-    i += 2
+    prosecutor_count = int(s[i+2])
+    i += 3
     while i < len(s):
         if (s[i] != '') and (s[i] != ' '):
             list_of_prosecutor.append(s[i])
@@ -38,27 +40,36 @@ def get_info():
     # forming final output strings for deputy and prosecutor
     deputy_result = 'Заместитель '
     prosecutor_result = 'Прокурор '
+
     if deputy_on_duty :
-        deputy_result += 'на месте, у него'
-        if len(list_of_deputy) == 0 : 
-            deputy_result += ' никого'
+        deputy_result += 'на месте'
+        if deputy_count == 0 : 
+            
+            deputy_result += ', у него никого'
         else :
+            deputy_result += ', у него ' + str(deputy_count) + ' чел'
             deputy_result += ':\n'
-            for guest in list_of_deputy:
-                deputy_result += guest + '\n'
+            for item in list_of_deputy:
+                deputy_result += item + '\n'
     else:
-        deputy_result += 'не на месте'
+        deputy_result += 'не на месте\n'
+        for item in list_of_deputy:
+            deputy_result += item +'\n'
     
     if prosecutor_on_duty :
-        prosecutor_result += 'на месте, у него'
-        if len(list_of_prosecutor) == 0 : 
-            prosecutor_result += ' никого'
-        else:
+        prosecutor_result += 'на месте'
+        if prosecutor_count == 0 : 
+            
+            prosecutor_result += ', у него никого'
+        else :
+            prosecutor_result += ', у него ' + str(prosecutor_count) + ' чел'
             prosecutor_result += ':\n'
-            for guest in list_of_prosecutor:
-                prosecutor_result += guest + '\n'
+            for item in list_of_prosecutor:
+                prosecutor_result += item + '\n'
     else:
-        prosecutor_result += 'не на месте'
+        prosecutor_result += 'не на месте\n'
+        for item in list_of_prosecutor:
+            prosecutor_result += item + '\n'
     
     return deputy_result, prosecutor_result
 

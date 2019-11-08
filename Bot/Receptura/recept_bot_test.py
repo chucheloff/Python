@@ -34,13 +34,14 @@ def write_user(user_id):
 
 def someone_left(bot, update):
     logging.info('checking moves')
-    f = open('C:/Users/Tom/Documents/Python/Bot/Receptura/Recept/Recept/bin/Release/moves_info.txt', 'r',encoding='UTF-8')
+    f = open('C:/Users/Tom/Documents/Python/Bot/Receptura/Recept/Recept/bin/Debug/moves_info_test.txt', 'r',encoding='UTF-8')
     moves = f.read()
     f.close()
-    open('C:/Users/Tom/Documents/Python/Bot/Receptura/Recept/Recept/bin/Release/moves_info.txt', 'w').close()
-    f = open('userbase.txt', 'r')
-    userbase = f.read().split('\n')
-    f.close()
+    open('C:/Users/Tom/Documents/Python/Bot/Receptura/Recept/Recept/bin/Debug/moves_info_test.txt', 'w').close()
+    
+    # for test purposes only i am in userbase
+    userbase = [548993,]
+    
     if moves != '':
         logging.info(moves)
         for user in userbase:

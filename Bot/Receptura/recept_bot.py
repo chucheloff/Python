@@ -6,6 +6,7 @@ from telegram.ext.dispatcher import run_async
 import logging
 import recept_reader
 
+
 def kto_gde(bot, update):
     message = recept_reader.get_info()
     logging.info(message)
@@ -45,7 +46,6 @@ def someone_left(bot, update):
         for user in userbase:
             if user != '':
                 bot.send_message(chat_id=user, text=moves)
-
 
 # testbot token : 986575172:AAHAppjUU5zdld-9tHb2ZlHs2Y43WWOKLkI
 # main release bot token : 1050540100:AAES5K5asAlvQdB1BjhlFDJEvaCf3COFF_A
