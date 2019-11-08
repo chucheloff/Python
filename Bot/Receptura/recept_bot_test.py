@@ -4,11 +4,11 @@ import requests
 import re
 from telegram.ext.dispatcher import run_async
 import logging
-import recept_reader
+import recept_reader_test
 
 
 def kto_gde(bot, update):
-    message = recept_reader.get_info()
+    message = recept_reader_test.get_info()
     logging.info(message)
     logging.info(update.message.chat_id)
     write_user(update.message.chat_id)
@@ -34,12 +34,12 @@ def write_user(user_id):
 
 def someone_left(bot, update):
     logging.info('checking moves')
-    f = open('C:/Users/Tom/Documents/Python/Bot/Receptura/Recept/Recept/bin/Debug/moves_info_test.txt', 'r',encoding='UTF-8')
+    f = open('C:/Users/Tom/Documents/Python/Bot/Receptura/Recept/Recept/bin/Release/moves_info_test.txt', 'r',encoding='UTF-8')
     moves = f.read()
     f.close()
-    open('C:/Users/Tom/Documents/Python/Bot/Receptura/Recept/Recept/bin/Debug/moves_info_test.txt', 'w').close()
+    open('C:/Users/Tom/Documents/Python/Bot/Receptura/Recept/Recept/bin/Release/moves_info_test.txt', 'w', encoding='UTF-8').close()
     
-    # for test purposes only i am in userbase
+    # for test purposes only I am in userbase
     userbase = [548993,]
     
     if moves != '':
@@ -48,7 +48,7 @@ def someone_left(bot, update):
             if user != '':
                 bot.send_message(chat_id=user, text=moves)
 
-# testbot token : 986575172:AAHAppjUU5zdld-9tHb2ZlHs2Y43WWOKLkI
+# test bot token : 986575172:AAHAppjUU5zdld-9tHb2ZlHs2Y43WWOKLkI
 # main release bot token : 1050540100:AAES5K5asAlvQdB1BjhlFDJEvaCf3COFF_A
 # baldie id = 22423968
 def main():
