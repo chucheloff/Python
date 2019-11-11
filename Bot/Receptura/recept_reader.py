@@ -13,7 +13,7 @@ def get_info():
     prosecutor_on_duty = False
     s = f.read().split('\n')
     f.close()
-    print(s)
+    # print(s)
     if s[1] == '+':
         deputy_on_duty = True
     else:
