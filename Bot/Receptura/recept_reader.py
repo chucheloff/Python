@@ -72,9 +72,13 @@ def get_info():
         prosecutor_result += 'не на месте\n'
         for item in list_of_prosecutor:
             prosecutor_result += item + '\n'
+    if 'Прокурор' in deputy_result:
+        return deputy_result
+    elif 'Заместитель' in prosecutor_result:
+        return prosecutor_result
+    else:
+        return deputy_result, prosecutor_result
     
-    return deputy_result, prosecutor_result
-
 def main():
     
     logging.basicConfig(level=logging.DEBUG)

@@ -8,12 +8,13 @@ import recept_reader
 from telegram.error import (TelegramError, Unauthorized, BadRequest, 
                             TimedOut, ChatMigrated, NetworkError)
 import datetime
+from time import sleep
 userbase = []
 userdelete = []
 
-def error_callback(update, context):
+def error_callback(bot,update,error):
     try:
-        raise context.error
+        raise error
     except Unauthorized:
         logging.info('Unauthorized exception thrown')
         pass
@@ -39,10 +40,11 @@ def error_callback(update, context):
         pass
         # handle all other telegram related errors
 
-
+@run_async
 def kto_gde(bot, update):
     message = recept_reader.get_info()
-    message = str(message[0]) + '\n\n' + str(message[1])
+    if len(message) == 2:
+        message = str(message[0]) + '\n\n' + str(message[1])
     # logging.debug(message)
     chat_id = update.message.chat_id
     write_user(chat_id)
@@ -145,12 +147,102 @@ def someone_left(bot,update):
                     logging.info(datetime.datetime.today().strftime("[%Y-%m-%d %H:%M:%S] ") + 'Network error in someone_left, retrying sending a message...')
                     bot.send_message(chat_id=user, text=moves)
 
-
+@run_async
 def deputy_alone(bot,update):
-    pass
+    deputy_on_duty = False
+    deputy_alone = False
+    timer = 0
+    chat_id = update.message.chat_id
+    logging.info(datetime.datetime.today().strftime("[%Y-%m-%d %H:%M:%S] ") + str(chat_id) + ' is waiting for deputy')
+    while not deputy_alone and  timer < 3600:
+        f = open('C://Users/Tom/Documents/Python/Bot/Receptura/Recept/Recept/bin/Release/recept_info.txt', 'r', encoding= 'UTF-8')
+        s = []
+        s = f.read().split('\n')
+        f.close()
+        # print(s)
+        if s[1] == '+':
+            deputy_on_duty = True
+        else:
+            deputy_on_duty = False
+        deputy_count = int(s[2])
+        if deputy_on_duty and deputy_count == 0:
+            deputy_alone = True
+        else:
+            if timer == 0:
+                try:
+                    bot.send_message(chat_id=chat_id, text='Я доложу!')
+                except telegram.error.NetworkError as identifier:
+                    logging.debug(str(identifier))
+                    logging.info('Network error in deputy_alone, retrying sending a message...')
+                    bot.send_message(chat_id=chat_id, text='Я доложу!')
+                logging.info(datetime.datetime.today().strftime("[%Y-%m-%d %H:%M:%S] ") + 'Notifying ' + str(chat_id) + ' that wait for deputy has started')
+            sleep(10)
+            timer += 10
+    if timer < 3600 :
+        try:
+            bot.send_message(chat_id=chat_id, text='Заместитель один')
+        except telegram.error.NetworkError as identifier:
+            logging.debug(str(identifier))
+            logging.info('Network error in deputy_alone, retrying sending a message...')
+            bot.send_message(chat_id=chat_id, text='Заместитель один')
+        logging.info(datetime.datetime.today().strftime("[%Y-%m-%d %H:%M:%S] ") + 'Notifying ' + str(chat_id) + ' that deputy is alone')
 
+@run_async
 def prosecutor_alone(bot,update):
-    pass
+    prosecutor_on_duty = False
+    prosecutor_alone = False
+    timer = 0
+    chat_id = update.message.chat_id
+    logging.info(datetime.datetime.today().strftime("[%Y-%m-%d %H:%M:%S] ") + str(chat_id) + ' is waiting for prosecutor')
+    while not prosecutor_alone and timer < 3600:
+        f = open('C://Users/Tom/Documents/Python/Bot/Receptura/Recept/Recept/bin/Release/recept_info.txt', 'r', encoding= 'UTF-8')
+        s = []
+        s = f.read().split('\n')
+        f.close()
+        i=0
+        while s[i] != 'шеф':
+            i += 1
+        if s[i+1] == '+':
+            prosecutor_on_duty = True
+        else:
+            prosecutor_on_duty = False
+        prosecutor_count = int(s[i+2])
+        if prosecutor_on_duty and prosecutor_count == 0:
+            prosecutor_alone = True
+        else:
+            if timer == 0:
+                try:
+                    bot.send_message(chat_id=chat_id, text='Я доложу!')
+                except telegram.error.NetworkError as identifier:
+                    logging.debug(str(identifier))
+                    logging.info('Network error in prosecutor_alone, retrying sending a message...')
+                    bot.send_message(chat_id=chat_id, text='Я доложу!')
+                logging.info(datetime.datetime.today().strftime("[%Y-%m-%d %H:%M:%S] ") + 'Notifying ' + str(chat_id) + ' that wait for prosecutor has started')
+            sleep(10)
+            timer += 10
+    if timer < 3600: 
+        try:
+            bot.send_message(chat_id=chat_id, text='Прокурор один')
+        except telegram.error.NetworkError as identifier:
+            logging.debug(str(identifier))
+            logging.info('Network error in deputy_alone, retrying sending a message...')
+            bot.send_message(chat_id=chat_id, text='Прокурор один')
+        logging.info(datetime.datetime.today().strftime("[%Y-%m-%d %H:%M:%S] ") + 'Notifying ' + str(chat_id) + ' that prosecutor is alone')
+
+def pomogite(bot,update):
+    chat_id = update.message.chat_id
+    f = open('C:/Users/Tom/Documents/Python/Bot/Receptura/help.txt','r',encoding='UTF-8')
+    pomosh = f.read()
+    f.close()
+    try:
+        bot.send_message(chat_id=chat_id, text=pomosh)
+    except telegram.error.NetworkError as identifier:
+        logging.debug(str(identifier))
+        logging.info('Network error in pomogite, retrying sending a message...')
+        bot.send_message(chat_id=chat_id, text=pomosh)
+    logging.info(datetime.datetime.today().strftime("[%Y-%m-%d %H:%M:%S] ") + 'Sending help to ' + str(chat_id))
+
+
 # testbot token : 986575172:AAHAppjUU5zdld-9tHb2ZlHs2Y43WWOKLkI
 # main release bot token : 1050540100:AAES5K5asAlvQdB1BjhlFDJEvaCf3COFF_A
 # baldie id = 22423968
@@ -178,7 +270,7 @@ def main():
             'password': 'is_blocked_hard',
         }
     }
-    updater = Updater(TOKEN, request_kwargs=REQUEST_KWARGS)
+    updater = Updater(TOKEN, request_kwargs=REQUEST_KWARGS, workers=30)
     dp = updater.dispatcher
     dp.add_error_handler(error_callback)
     
@@ -187,10 +279,13 @@ def main():
     dp.add_handler(CommandHandler('switch_notifications', switch_user))
     dp.add_handler(CommandHandler('lone_zam', deputy_alone))
     dp.add_handler(CommandHandler('lone_chef', prosecutor_alone))
+    dp.add_handler(CommandHandler('pomogite', pomogite))
+    dp.add_handler(CommandHandler('start', pomogite))
     job_queue = updater.job_queue
     job_queue.run_repeating(someone_left, interval=120, first=0)
     updater.start_polling()
     updater.idle()
+
 
 
 if __name__ == "__main__":
