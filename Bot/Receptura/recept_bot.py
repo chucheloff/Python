@@ -12,11 +12,46 @@ import datetime
 from time import sleep
 from functools import wraps
 
+
 userbase = []
 userdelete = []
 SERVICE_MESSAGE_EXISTS = False
 LIST_OF_ADMINS = [548993]
 SERVICE_MESSAGE_ID = 0
+deputy_in_office = False
+prosecutor_in_office = False
+
+
+def save():
+    log('autosaving...')
+    global prosecutor_in_office
+    global deputy_in_office
+    with open('C:/Users/Tom/Documents/Python/Bot/Receptura/save.txt', 'w') as f:
+        if prosecutor_in_office:
+            f.write('prosecutor_in_office = True\n')
+        else:
+            f.write('prosecutor_in_office = False\n')
+        if deputy_in_office:
+            f.write('deputy_in_office = True\n')
+        else:
+            f.write('deputy_in_office = False\n')
+
+
+def load():
+    global prosecutor_in_office
+    global deputy_in_office
+    log('loading...')
+    with open('C:/Users/Tom/Documents/Python/Bot/Receptura/save.txt', 'r') as f:
+        autosave = f.read().split('\n')
+        if autosave[0] == 'prosecutor_in_office = True':
+            prosecutor_in_office = True
+        else:
+            prosecutor_in_office = False
+        if autosave[1] == 'deputy_in_office = True':
+            deputy_in_office = True
+        else:
+            deputy_in_office = False
+
 
 # holy moly this is like the best thing i've done on python
 # this is a function wrapper that checks if a user who's calling it
@@ -85,6 +120,7 @@ def error_callback(bot, update, error):
         log('TelegramError Exception thrown')
         pass
         # handle all other telegram related errors
+
 
 @send_action(ChatAction.TYPING)
 @run_async
@@ -197,8 +233,22 @@ def someone_left(bot, update):
     f.close()
     open('C:/Users/Tom/Documents/Python/Bot/Receptura/Recept/Recept/bin/Release/moves_info.txt', 'w').close()
     global userbase
+    global deputy_in_office
+    global prosecutor_in_office
     if moves != '':
         log(moves)
+        if 'Заместитель уехал' in moves:
+            deputy_in_office = False
+            save()
+        if 'Заместитель приехал' in moves:
+            deputy_in_office = True
+            save()
+        if 'Прокурор приехал' in moves:
+            prosecutor_in_office = True
+            save()
+        if 'Прокурор уехал' in moves:
+            prosecutor_in_office = False
+            save()
         for user in userbase:
             if user != '':
                 try:
@@ -214,92 +264,108 @@ def someone_left(bot, update):
 # to those who demanded to get one
 @run_async
 def deputy_alone(bot, update):
-    deputy_on_duty = False
-    deputy_alone = False
-    timer = 0
-    chat_id = update.message.chat_id
-    log(str(chat_id) + ' is waiting for deputy')
-    while not deputy_alone and timer < 3600:
-        f = open('C://Users/Tom/Documents/Python/Bot/Receptura/Recept/Recept/bin/Release/recept_info.txt', 'r',
-                 encoding='UTF-8')
-        s = []
-        s = f.read().split('\n')
-        f.close()
-        # print(s)
-        if s[1] == '+':
-            deputy_on_duty = True
-        else:
-            deputy_on_duty = False
-        deputy_count = int(s[2])
-        if deputy_on_duty and deputy_count == 0:
-            deputy_alone = True
-        else:
-            if timer == 0:
-                try:
-                    bot.send_message(chat_id=chat_id, text='Я доложу!')
-                except telegram.error.NetworkError as identifier:
-                    logging.debug(str(identifier))
-                    log('Network error in deputy_alone, retrying sending a message...')
-                    bot.send_message(chat_id=chat_id, text='Я доложу!')
-                log('Notifying ' + str(
-                    chat_id) + ' that wait for deputy has started')
-            sleep(10)
-            timer += 10
-    if timer < 3600:
+    if deputy_in_office:
+        deputy_on_duty = False
+        deputy_alone = False
+        timer = 0
+        chat_id = update.message.chat_id
+        log(str(chat_id) + ' is waiting for deputy')
+        while not deputy_alone and timer < 3600:
+            f = open('C://Users/Tom/Documents/Python/Bot/Receptura/Recept/Recept/bin/Release/recept_info.txt', 'r',
+                     encoding='UTF-8')
+            s = []
+            s = f.read().split('\n')
+            f.close()
+            # print(s)
+            if s[1] == '+':
+                deputy_on_duty = True
+            else:
+                deputy_on_duty = False
+            deputy_count = int(s[2])
+            if deputy_on_duty and deputy_count == 0:
+                deputy_alone = True
+            else:
+                if timer == 0:
+                    try:
+                        bot.send_message(chat_id=chat_id, text='Я доложу!')
+                    except telegram.error.NetworkError as identifier:
+                        logging.debug(str(identifier))
+                        log('Network error in deputy_alone, retrying sending a message...')
+                        bot.send_message(chat_id=chat_id, text='Я доложу!')
+                    log('Notifying ' + str(chat_id) + ' that wait for deputy has started')
+                sleep(10)
+                timer += 10
+        if timer < 3600:
+            try:
+                bot.send_message(chat_id=chat_id, text='Заместитель один')
+            except telegram.error.NetworkError as identifier:
+                logging.debug(str(identifier))
+                log('Network error in deputy_alone, retrying sending a message...')
+                bot.send_message(chat_id=chat_id, text='Заместитель один')
+            log('Notifying ' + str(chat_id) + ' that deputy is alone')
+    else:
+        chat_id = update.message.chat_id
         try:
-            bot.send_message(chat_id=chat_id, text='Заместитель один')
+            bot.send_message(chat_id=chat_id, text='Заместитель не в офисе')
         except telegram.error.NetworkError as identifier:
             logging.debug(str(identifier))
             log('Network error in deputy_alone, retrying sending a message...')
-            bot.send_message(chat_id=chat_id, text='Заместитель один')
-        log('Notifying ' + str(
-            chat_id) + ' that deputy is alone')
+            bot.send_message(chat_id=chat_id, text='Заместитель не в офисе')
+        log('Notifying ' + str(chat_id) + ' that deputy is not in office')
 
 
 @run_async
 def prosecutor_alone(bot, update):
-    prosecutor_on_duty = False
-    prosecutor_alone = False
-    timer = 0
-    chat_id = update.message.chat_id
-    log(str(chat_id) + ' is waiting for prosecutor')
-    while not prosecutor_alone and timer < 3600:
-        f = open('C://Users/Tom/Documents/Python/Bot/Receptura/Recept/Recept/bin/Release/recept_info.txt', 'r',
-                 encoding='UTF-8')
-        s = []
-        s = f.read().split('\n')
-        f.close()
-        i = 0
-        while s[i] != 'шеф':
-            i += 1
-        if s[i + 1] == '+':
-            prosecutor_on_duty = True
-        else:
-            prosecutor_on_duty = False
-        prosecutor_count = int(s[i + 2])
-        if prosecutor_on_duty and prosecutor_count == 0:
-            prosecutor_alone = True
-        else:
-            if timer == 0:
-                try:
-                    bot.send_message(chat_id=chat_id, text='Я доложу!')
-                except telegram.error.NetworkError as identifier:
-                    logging.debug(str(identifier))
-                    log('Network error in prosecutor_alone, retrying sending a message...')
-                    bot.send_message(chat_id=chat_id, text='Я доложу!')
-                log('Notifying ' + str(
-                    chat_id) + ' that wait for prosecutor has started')
-            sleep(10)
-            timer += 10
-    if timer < 3600:
+    if prosecutor_in_office:
+        prosecutor_on_duty = False
+        prosecutor_alone = False
+        timer = 0
+        chat_id = update.message.chat_id
+        log(str(chat_id) + ' is waiting for prosecutor')
+        while not prosecutor_alone and timer < 3600:
+            f = open('C://Users/Tom/Documents/Python/Bot/Receptura/Recept/Recept/bin/Release/recept_info.txt', 'r',
+                     encoding='UTF-8')
+            s = []
+            s = f.read().split('\n')
+            f.close()
+            i = 0
+            while s[i] != 'шеф':
+                i += 1
+            if s[i + 1] == '+':
+                prosecutor_on_duty = True
+            else:
+                prosecutor_on_duty = False
+            prosecutor_count = int(s[i + 2])
+            if prosecutor_on_duty and prosecutor_count == 0:
+                prosecutor_alone = True
+            else:
+                if timer == 0:
+                    try:
+                        bot.send_message(chat_id=chat_id, text='Я доложу!')
+                    except telegram.error.NetworkError as identifier:
+                        logging.debug(str(identifier))
+                        log('Network error in prosecutor_alone, retrying sending a message...')
+                        bot.send_message(chat_id=chat_id, text='Я доложу!')
+                    log('Notifying ' + str(chat_id) + ' that wait for prosecutor has started')
+                sleep(10)
+                timer += 10
+        if timer < 3600:
+            try:
+                bot.send_message(chat_id=chat_id, text='Прокурор один')
+            except telegram.error.NetworkError as identifier:
+                logging.debug(str(identifier))
+                log('Network error in deputy_alone, retrying sending a message...')
+                bot.send_message(chat_id=chat_id, text='Прокурор один')
+            log('Notifying ' + str(chat_id) + ' that prosecutor is alone')
+    else:
+        chat_id = update.message.chat_id
         try:
-            bot.send_message(chat_id=chat_id, text='Прокурор один')
+            bot.send_message(chat_id=chat_id, text='Прокурор не в конторе')
         except telegram.error.NetworkError as identifier:
             logging.debug(str(identifier))
             log('Network error in deputy_alone, retrying sending a message...')
-            bot.send_message(chat_id=chat_id, text='Прокурор один')
-        log('Notifying ' + str(
-            chat_id) + ' that prosecutor is alone')
+            bot.send_message(chat_id=chat_id, text='Прокурор не в конторе')
+        log('Notifying ' + str(chat_id) + ' that prosecutor is not in office')
 
 
 # sending help_start.txt contents to user on /start and help.txt on /pomogite
@@ -327,6 +393,7 @@ def pomogite_start(bot, update):
     log('Asking to uncover the identity '
                  + str(chat_id))
 
+
 @send_action(ChatAction.TYPING)
 def pomogite(bot, update):
 
@@ -344,6 +411,8 @@ def pomogite(bot, update):
     log('Sending help to ' + str(chat_id))
 
 
+# every minute bot de-sleepes itself by sending me a message and then deleting it right after
+# gotta be a smarter way to stay connected, but it seems like not with proxy enabled
 def check_connection(bot, update):
     global SERVICE_MESSAGE_ID
     global SERVICE_MESSAGE_EXISTS
@@ -364,6 +433,7 @@ def check_connection(bot, update):
         SERVICE_MESSAGE_EXISTS = True
 
 
+# i made a wise decision to log everything users input into the bot here
 def log_user_messages(bot, update):
     chat_id = update.message.chat_id
     log('user ' + str(chat_id)
@@ -389,9 +459,13 @@ def whisper(bot, update):
 
 # program execution starts here
 def main():
+    # loading autosave
+    load()
+
     # setting up logger
     # INFO for main events
     # on DEBUG level all the data that moves through program is duplicated
+    print('Starting logger')
     logging.basicConfig(level=logging.INFO)
 
     # filling up global variables with userbases, might consider upgrade this part

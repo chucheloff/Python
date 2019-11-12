@@ -1,0 +1,2 @@
+prosecutor_in_office = False
+deputy_in_office = False
