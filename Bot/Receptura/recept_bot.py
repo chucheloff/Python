@@ -466,7 +466,7 @@ def main():
     # INFO for main events
     # on DEBUG level all the data that moves through program is duplicated
     print('Starting logger')
-    logging.basicConfig(level=logging.INFO)
+    logging.root.setLevel(logging.INFO)
 
     # filling up global variables with userbases, might consider upgrade this part
     global userbase
