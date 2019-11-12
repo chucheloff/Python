@@ -1,6 +1,6 @@
 {
-    "president": {
-        "name": "Zaphod Beeblebrox",
-        "species": "Betelgeusian"
+    "user": {
+        "name": "Хозяин Начальник",
+        "chat_id": 548993
     }
 }
