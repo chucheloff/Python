@@ -74,7 +74,10 @@ def write_user(chat_id):
             f.close()
             logging.info(datetime.datetime.today().strftime("[%Y-%m-%d %H:%M:%S] ") + 'added new user: id=' + str(chat_id))
 
-
+# this method manipulates userbase.txt and userdelete.txt files in that manner that it just 
+# "moves" id of a person who called it back and forth between the userbase and userdelete
+# which basically means he\she will or will not get notifications sent.
+# it also makes sure user is mentioned only once in either userbase or userdelete
 def switch_user(bot,update):
     chat_id = update.message.chat_id
     global userdelete
@@ -84,8 +87,8 @@ def switch_user(bot,update):
     if str(chat_id) in userdelete:
         # add to userbase 
         # remove from userdelete
-
-        userbase.append(str(chat_id))
+        if not str(chat_id) in userbase:
+            userbase.append(str(chat_id))
         f = open('C:/Users/Tom/Documents/Python/Bot/Receptura/userbase.txt','a',encoding='UTF-8')
         f.write('\n'+str(chat_id))
         f.close()
@@ -107,7 +110,8 @@ def switch_user(bot,update):
     else:  
         # add to userdelete
         # remove from userbase
-        userdelete.append(str(chat_id))
+        if not str(chat_id) in userdelete:
+            userdelete.append(str(chat_id))
         f = open('C:/Users/Tom/Documents/Python/Bot/Receptura/userdelete.txt','a',encoding='UTF-8')
         f.write('\n'+ str(chat_id))
         f.close()
@@ -128,7 +132,9 @@ def switch_user(bot,update):
             logging.info('Network error in delete_user, retrying sending a message...')
             bot.send_message(chat_id=chat_id, text='Оповещения были отключены')
 
-
+# this method is ticking on background on itself not dependant on users' requests
+# checking if something important is happening in moves_info.txt deep down in recept libs
+# to then notify all bot users acoording to userbase.txt about what it'd found there
 def someone_left(bot,update):
     logging.info(datetime.datetime.today().strftime("[%Y-%m-%d %H:%M:%S] ") + 'checking moves')
     f = open('C:/Users/Tom/Documents/Python/Bot/Receptura/Recept/Recept/bin/Release/moves_info.txt', 'r',encoding='UTF-8')
@@ -147,6 +153,10 @@ def someone_left(bot,update):
                     logging.info(datetime.datetime.today().strftime("[%Y-%m-%d %H:%M:%S] ") + 'Network error in someone_left, retrying sending a message...')
                     bot.send_message(chat_id=user, text=moves)
 
+
+# two fucntions below are timer-based multithreaded alarm clocks that tick info from recept
+# every 10 seconds to see if some things are true and other are not to then send some notifications
+# to those who demanded to get one
 @run_async
 def deputy_alone(bot,update):
     deputy_on_duty = False
@@ -229,6 +239,29 @@ def prosecutor_alone(bot,update):
             bot.send_message(chat_id=chat_id, text='Прокурор один')
         logging.info(datetime.datetime.today().strftime("[%Y-%m-%d %H:%M:%S] ") + 'Notifying ' + str(chat_id) + ' that prosecutor is alone')
 
+
+# sending help_start.txt contents to user on /start and help.txt on /pomogite 
+def pomogite_start(bot,update):
+    chat_id = update.message.chat_id
+    f = open('C:/Users/Tom/Documents/Python/Bot/Receptura/help_start.txt','r',encoding='UTF-8')
+    pomosh = f.read()
+    f.close()
+    try:
+        bot.send_message(chat_id=chat_id, text=pomosh)
+    except telegram.error.NetworkError as identifier:
+        logging.debug(str(identifier))
+        logging.info('Network error in pomogite, retrying sending a message...')
+        bot.send_message(chat_id=chat_id, text=pomosh)
+    logging.info(datetime.datetime.today().strftime("[%Y-%m-%d %H:%M:%S] ") + 'Sending help to ' + str(chat_id))
+
+    try:
+        bot.send_message(chat_id=chat_id, text='Не хотите представиться?')
+    except telegram.error.NetworkError as identifier:
+        logging.debug(str(identifier))
+        logging.info('Network error in pomogite, retrying sending a message...')
+        bot.send_message(chat_id=chat_id, text=pomosh)
+    logging.info(datetime.datetime.today().strftime("[%Y-%m-%d %H:%M:%S] ") + 'Asking to uncover the identity ' + str(chat_id))
+
 def pomogite(bot,update):
     chat_id = update.message.chat_id
     f = open('C:/Users/Tom/Documents/Python/Bot/Receptura/help.txt','r',encoding='UTF-8')
@@ -242,13 +275,14 @@ def pomogite(bot,update):
         bot.send_message(chat_id=chat_id, text=pomosh)
     logging.info(datetime.datetime.today().strftime("[%Y-%m-%d %H:%M:%S] ") + 'Sending help to ' + str(chat_id))
 
-
-# testbot token : 986575172:AAHAppjUU5zdld-9tHb2ZlHs2Y43WWOKLkI
-# main release bot token : 1050540100:AAES5K5asAlvQdB1BjhlFDJEvaCf3COFF_A
-# baldie id = 22423968
+# program execution starts here
 def main():
+    # setting up logger
+    # INFO for main events
+    # on DEBUG level all the data that moves through program is duplicated
     logging.basicConfig(level=logging.INFO)
 
+    # filling up global variables with userbases, might consider upgrade this part
     global userbase
     f = open('C:/Users/Tom/Documents/Python/Bot/Receptura/userbase.txt','r', encoding='UTF-8')
     userbase = f.read().split('\n')
@@ -261,7 +295,12 @@ def main():
     f.close()
     logging.info(datetime.datetime.today().strftime("[%Y-%m-%d %H:%M:%S] ") + 'userdelete : ' + str(userdelete))
 
+    # testbot token : 986575172:AAHAppjUU5zdld-9tHb2ZlHs2Y43WWOKLkI
+    # main release bot token : 1050540100:AAES5K5asAlvQdB1BjhlFDJEvaCf3COFF_A
+    # baldie id = 22423968
     TOKEN = "1050540100:AAES5K5asAlvQdB1BjhlFDJEvaCf3COFF_A"
+
+    # proxy is private one from barry's last job office, so it's a long overdue also
     REQUEST_KWARGS = {
         'proxy_url': 'socks5://193.37.152.154:8814',
 
@@ -270,24 +309,28 @@ def main():
             'password': 'is_blocked_hard',
         }
     }
+    # magic only god knows how it's working
     updater = Updater(TOKEN, request_kwargs=REQUEST_KWARGS, workers=30)
     dp = updater.dispatcher
     dp.add_error_handler(error_callback)
     
+    # powering up all of the methods users USE
     logging.info(datetime.datetime.today().strftime("[%Y-%m-%d %H:%M:%S] ") + "started logger successfully")
     dp.add_handler(CommandHandler('kto_gde', kto_gde))
     dp.add_handler(CommandHandler('switch_notifications', switch_user))
     dp.add_handler(CommandHandler('lone_zam', deputy_alone))
     dp.add_handler(CommandHandler('lone_chef', prosecutor_alone))
     dp.add_handler(CommandHandler('pomogite', pomogite))
-    dp.add_handler(CommandHandler('start', pomogite))
+    dp.add_handler(CommandHandler('start', pomogite_start))
     job_queue = updater.job_queue
     job_queue.run_repeating(someone_left, interval=120, first=0)
+
+    # some more magic just dont ever touch it 
     updater.start_polling()
     updater.idle()
 
 
-
+# i read somewhere that this is needed somehow
 if __name__ == "__main__":
     main()
 
