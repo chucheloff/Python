@@ -26,6 +26,8 @@ def save():
     log('autosaving...')
     global prosecutor_in_office
     global deputy_in_office
+    global SERVICE_MESSAGE_ID
+    global SERVICE_MESSAGE_EXISTS
     with open('C:/Users/Tom/Documents/Python/Bot/Receptura/save.txt', 'w') as f:
         if prosecutor_in_office:
             f.write('prosecutor_in_office = True\n')
@@ -35,11 +37,15 @@ def save():
             f.write('deputy_in_office = True\n')
         else:
             f.write('deputy_in_office = False\n')
+        if SERVICE_MESSAGE_EXISTS:
+            f.write('SERVICE_MESSAGE_ID = ' + str(SERVICE_MESSAGE_ID))
 
 
 def load():
     global prosecutor_in_office
     global deputy_in_office
+    global SERVICE_MESSAGE_EXISTS
+    global SERVICE_MESSAGE_ID
     log('loading...')
     with open('C:/Users/Tom/Documents/Python/Bot/Receptura/save.txt', 'r') as f:
         autosave = f.read().split('\n')
@@ -51,6 +57,11 @@ def load():
             deputy_in_office = True
         else:
             deputy_in_office = False
+        SERVICE_MESSAGE_ID = int(autosave[2].split(' ')[2])
+        if SERVICE_MESSAGE_ID:
+            SERVICE_MESSAGE_EXISTS = True
+        else:
+            SERVICE_MESSAGE_EXISTS = False
 
 
 # holy moly this is like the best thing i've done on python
@@ -125,8 +136,14 @@ def error_callback(bot, update, error):
 @send_action(ChatAction.TYPING)
 @run_async
 def kto_gde(bot, update):
+
     message = recept_reader.get_info()
     if len(message) == 2:
+        message = [message[0],message[1]]
+        if not deputy_in_office:
+            message[0] = 'Заместитель не в конторе'
+        if not prosecutor_in_office:
+            message[1] = 'Прокурор не в конторе'
         message = str(message[0]) + '\n\n' + str(message[1])
     # logging.debug(message)
     chat_id = update.message.chat_id
@@ -306,11 +323,11 @@ def deputy_alone(bot, update):
     else:
         chat_id = update.message.chat_id
         try:
-            bot.send_message(chat_id=chat_id, text='Заместитель не в офисе')
+            bot.send_message(chat_id=chat_id, text='Заместитель не в конторе')
         except telegram.error.NetworkError as identifier:
             logging.debug(str(identifier))
             log('Network error in deputy_alone, retrying sending a message...')
-            bot.send_message(chat_id=chat_id, text='Заместитель не в офисе')
+            bot.send_message(chat_id=chat_id, text='Заместитель не в конторе')
         log('Notifying ' + str(chat_id) + ' that deputy is not in office')
 
 
@@ -431,6 +448,7 @@ def check_connection(bot, update):
                                                   text='bot died with message: '
                                                        + str(identifier) + '\n\nbut now online').message_id
         SERVICE_MESSAGE_EXISTS = True
+        save()
 
 
 # i made a wise decision to log everything users input into the bot here
