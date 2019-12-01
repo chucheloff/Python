@@ -310,6 +310,17 @@ namespace Recept
         {
             deputyCount = listBoxDeputy.SelectedItems.Count;
 
+            // removing empty strings from count
+            int updatedDeputyCount = deputyCount;
+            for ( int i = 0; i < deputyCount; i++)
+            {
+                if (listBoxDeputy.SelectedItems[i].ToString() == "")
+                {
+                    updatedDeputyCount -= 1;
+                }
+            }
+            deputyCount = updatedDeputyCount;
+
             labelDeputyCount.Text = (deputyCount + deputyCountExt) + " чел";
 
             if ((deputyCount + deputyCountExt) > 0)
@@ -329,6 +340,18 @@ namespace Recept
         void UpdateProsecutorCount()
         {
             prosecutorCount = listBoxProsecutor.SelectedItems.Count;
+
+            // removing empty strings from count
+            int updatedProsecutorCount = prosecutorCount;
+            for ( int i = 0; i< prosecutorCount; i++)
+            {
+                if (listBoxProsecutor.SelectedItems[i].ToString() == "")
+                {
+                    updatedProsecutorCount -= 1;
+                }
+            }
+
+            prosecutorCount = updatedProsecutorCount;
 
             labelProsecutorCount.Text = (prosecutorCount + prosecutorCountExt) + " чел";
             if ((prosecutorCount + prosecutorCountExt) > 0)
