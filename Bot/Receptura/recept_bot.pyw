@@ -1,4 +1,13 @@
-﻿import telegram
+﻿"""
+    TO-DO's:
+* Make moves reader smart not to spam all the moves detected over a weekend if bot was inactive
+* Make bot output script so as it will output all guests no matter if bosses are not in office
+* Make readme for global bot documentation and comment all the written code and files
+
+"""
+
+# imports
+import telegram
 from telegram import ChatAction
 from telegram.ext import Updater, InlineQueryHandler, CommandHandler, MessageHandler, Filters
 import requests
@@ -13,7 +22,9 @@ import time
 from time import sleep
 from functools import wraps
 
+#global variables defining
 
+# userbase and userdelete are just copies of userbase.txt and userdelete.txt
 userbase = []
 userdelete = []
 SERVICE_MESSAGE_EXISTS = False
@@ -65,6 +76,30 @@ def load():
             SERVICE_MESSAGE_EXISTS = False
         else:
             SERVICE_MESSAGE_EXISTS = True
+    # setting up logger
+    # INFO for main events
+    # on DEBUG level all the data that moves through program is duplicated
+    log('starting logger...\n')
+    logging.root.setLevel(logging.INFO)
+
+    # filling up global variables with userbases, might consider upgrade this part
+    global userbase
+    f = open('C:/Users/Tom/Documents/Python/Bot/Receptura/userbase.txt', 'r', encoding='UTF-8')
+    userbase = f.read().split('\n')
+    f.close()
+    log('userbase : ' + str(userbase))
+    for user in userbase :
+        if user == '':
+            userbase.remove(user)
+
+    global userdelete
+    f = open('C:/Users/Tom/Documents/Python/Bot/Receptura/userdelete.txt', 'r', encoding='UTF-8')
+    userdelete = f.read().split('\n')
+    f.close()
+    log('userdelete : ' + str(userdelete))
+    for user in userdelete:
+        if user == '':
+            userdelete.remove(user)
 
 
 # holy moly this is like the best thing i've done on python
@@ -94,6 +129,8 @@ def restricted(func):
     return wrapped
 
 
+# this one is a little cute wrapper that displays to user that bot is typing something 
+# while actually struggling in his last attempts not to crash and die
 def send_action(action):
     """Sends `action` while processing func command."""
 
@@ -487,26 +524,8 @@ def whisper(bot, update):
 # program execution starts here
 def main():
     # loading autosave
+    # and basic preparations
     load()
-
-    # setting up logger
-    # INFO for main events
-    # on DEBUG level all the data that moves through program is duplicated
-    log('starting logger...\n')
-    logging.root.setLevel(logging.INFO)
-
-    # filling up global variables with userbases, might consider upgrade this part
-    global userbase
-    f = open('C:/Users/Tom/Documents/Python/Bot/Receptura/userbase.txt', 'r', encoding='UTF-8')
-    userbase = f.read().split('\n')
-    f.close()
-    log('userbase : ' + str(userbase))
-
-    global userdelete
-    f = open('C:/Users/Tom/Documents/Python/Bot/Receptura/userdelete.txt', 'r', encoding='UTF-8')
-    userdelete = f.read().split('\n')
-    f.close()
-    log('userdelete : ' + str(userdelete))
 
     # testbot token : 986575172:AAHAppjUU5zdld-9tHb2ZlHs2Y43WWOKLkI
     # main release bot token : 1050540100:AAES5K5asAlvQdB1BjhlFDJEvaCf3COFF_A
