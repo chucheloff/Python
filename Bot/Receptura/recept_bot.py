@@ -230,7 +230,7 @@ def error_callback(bot, update, error):
         pass
         # remove update.message.chat_id from conversation list
     except BadRequest:
-        log('BadRequest Exception thrown')
+        log('BadRequest exception thrown')
         pass
         # handle malformed requests - read more below!
     except TimedOut:
@@ -259,10 +259,10 @@ def kto_gde(bot, update):
     if len(message) == 2:
         message = [message[0],message[1]]
         if not deputy_in_office:
-            message[0] = 'Заместитель не в конторе\n' + str(message[0])
+            message[0] = 'Заместитель не в конторе'
             
         if not prosecutor_in_office:
-            message[1] = 'Прокурор не в конторе\n' + str(message[1])
+            message[1] = 'Прокурор не в конторе'
 
         message = str(message[0]) + '\n\n' + str(message[1])
     # logging.debug(message)
@@ -353,6 +353,46 @@ def switch_user(bot, update):
             log('Network error in delete_user, retrying sending a message...')
             bot.send_message(chat_id=chat_id, text='Оповещения были отключены')
 
+def switch_user_by_id(chat_id):
+    global userdelete
+    global userbase
+    # user can't be in both of the databases at the same time
+    # if so - it's my mistake, will fix
+    if str(chat_id) in userdelete:
+        # add to userbase 
+        # remove from userdelete
+        if not str(chat_id) in userbase:
+            userbase.append(str(chat_id))
+        f = open('C:/Users/Tom/Documents/Python/Bot/Receptura/userbase.txt', 'a', encoding='UTF-8')
+        f.write('\n' + str(chat_id))
+        f.close()
+
+        if str(chat_id) in userdelete:
+            userdelete.remove(str(chat_id))
+        f = open('C:/Users/Tom/Documents/Python/Bot/Receptura/userdelete.txt', 'w', encoding='UTF-8')
+        for user in userdelete:
+            if user != '':
+                f.write(user + '\n')
+        f.close()
+        log('Notifications ON for ' + str(chat_id))
+    else:
+        # add to userdelete
+        # remove from userbase
+        if not str(chat_id) in userdelete:
+            userdelete.append(str(chat_id))
+        f = open('C:/Users/Tom/Documents/Python/Bot/Receptura/userdelete.txt', 'a', encoding='UTF-8')
+        f.write('\n' + str(chat_id))
+        f.close()
+
+        if str(chat_id) in userbase:
+            userbase.remove(str(chat_id))
+        f = open('C:/Users/Tom/Documents/Python/Bot/Receptura/userbase.txt', 'w', encoding='UTF-8')
+        for user in userbase:
+            if user != '':
+                f.write(user + '\n')
+        f.close()
+        log('Notifications OFF for ' + str(chat_id))
+
 
 # my logging format
 def log(s):
@@ -390,10 +430,17 @@ def someone_left(bot, update):
             if user != '':
                 try:
                     bot.send_message(chat_id=user, text=moves)
+                except telegram.error.BadRequest as identifier:
+                    log('Bad Request in someone_left')
+                    switch_user_by_id(user)
+                except telegram.error.Unauthorized as identifier:
+                    log('Unauthorized in someone_left')
+                    switch_user_by_id(user)
                 except telegram.error.NetworkError as identifier:
                     logging.debug(str(identifier))
                     log('Network error in someone_left, retrying sending a message...')
                     bot.send_message(chat_id=user, text=moves)
+
 
 
 # two fucntions below are timer-based multithreaded alarm clocks that tick info from recept
@@ -594,6 +641,12 @@ def whisper(bot, update):
     for user in userbase:
         try:
             bot.send_message(chat_id=user, text=whisper_text)
+        except telegram.error.Unauthorized as identifier:
+            log('Unauthorized in whisper')
+            switch_user_by_id(user)
+        except telegram.error.BadRequest as identifier:
+            log('Bad Requset in whisper')
+            switch_user_by_id(user)
         except telegram.error.NetworkError as identifier:
             logging.debug(str(identifier))
             log('Network error in whisper, retrying sending a message...')
@@ -603,6 +656,7 @@ def whisper(bot, update):
 
 # program execution starts here
 def main():
+    logging.basicConfig(level=logging.DEBUG)
     # loading autosave
     # and basic preparations
     load()
@@ -610,7 +664,7 @@ def main():
     # testbot token : 986575172:AAHAppjUU5zdld-9tHb2ZlHs2Y43WWOKLkI
     # main release bot token : 1050540100:AAES5K5asAlvQdB1BjhlFDJEvaCf3COFF_A
     # baldie id = 22423968 | my id = 548993
-    TOKEN = "986575172:AAHAppjUU5zdld-9tHb2ZlHs2Y43WWOKLkI"
+    TOKEN = "1050540100:AAES5K5asAlvQdB1BjhlFDJEvaCf3COFF_A"
 
     # proxy is private one from barry's last job office, so it's a long overdue also
     REQUEST_KWARGS = {
@@ -620,7 +674,7 @@ def main():
             'password': 'is_blocked_hard',
         }
     }
-    
+
     # magic only god knows how it's working
     updater = Updater(TOKEN, request_kwargs=REQUEST_KWARGS, workers=30)
     dp = updater.dispatcher
