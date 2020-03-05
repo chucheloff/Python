@@ -3,6 +3,7 @@
 * Make moves reader smart not to spam all the moves detected over a weekend if bot was inactive
  + ? * Make bot output script so as it will output all guests no matter if bosses are not in office
 * Make readme for global bot documentation and comment all the written code and files
+* Fix userbase and userdelete randomly exchange users
 
 """
 
@@ -227,7 +228,7 @@ def error_callback(bot, update, error):
     except Unauthorized:
         log('Unauthorized exception thrown')
         log('removing user #' + str(update.message.chat_id) + ' from userbase')
-        switch_user(bot,update)
+        # switch_user(bot,update)
         pass
         # remove update.message.chat_id from conversation list
     except BadRequest:
@@ -433,10 +434,10 @@ def someone_left(bot, update):
                     bot.send_message(chat_id=user, text=moves)
                 except telegram.error.BadRequest as identifier:
                     log('Bad Request in someone_left')
-                    switch_user_by_id(user)
+                    # switch_user_by_id(user)
                 except telegram.error.Unauthorized as identifier:
                     log('Unauthorized in someone_left')
-                    switch_user_by_id(user)
+                    # switch_user_by_id(user)
                 except telegram.error.NetworkError as identifier:
                     logging.debug(str(identifier))
                     log('Network error in someone_left, retrying sending a message...')
@@ -644,10 +645,10 @@ def whisper(bot, update):
             bot.send_message(chat_id=user, text=whisper_text)
         except telegram.error.Unauthorized as identifier:
             log('Unauthorized in whisper')
-            switch_user_by_id(user)
+            # switch_user_by_id(user)
         except telegram.error.BadRequest as identifier:
             log('Bad Requset in whisper')
-            switch_user_by_id(user)
+            # switch_user_by_id(user)
         except telegram.error.NetworkError as identifier:
             logging.debug(str(identifier))
             log('Network error in whisper, retrying sending a message...')
