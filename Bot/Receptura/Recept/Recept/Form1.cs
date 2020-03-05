@@ -4,7 +4,6 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.IO;
-using System.Drawing.Imaging;
 
 namespace Recept
 {
@@ -24,7 +23,15 @@ namespace Recept
         {
             InitializeComponent();
         }
-    
+
+        private void getResult(string s)
+        {
+            DialogResult result = MessageBox.Show("Доложить?", "Что делать?", MessageBoxButtons.YesNo);
+            if (result == DialogResult.Yes)
+            {
+                WriteMoves(s);
+            }
+        }
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -185,13 +192,13 @@ namespace Recept
             {
                 deputyAtDinner.ForeColor = Color.Black;
                 deputyAtDinner.BackColor = Color.LawnGreen;
-                WriteMoves("Заместитель приехал");
+                getResult("Заместитель приехал");
             }
             else
             {
                 deputyAtDinner.ForeColor = Color.LawnGreen;
                 deputyAtDinner.BackColor = Color.FromArgb(64, 64, 64);
-                WriteMoves("Заместитель уехал");
+                getResult("Заместитель уехал");
             }
 
         }
@@ -203,13 +210,13 @@ namespace Recept
             {
                 prosecutorAtDinner.ForeColor = Color.Black;
                 prosecutorAtDinner.BackColor = Color.LawnGreen;
-                WriteMoves("Прокурор приехал");
+                getResult("Прокурор приехал");
             }
             else
             {
                 prosecutorAtDinner.ForeColor = Color.LawnGreen;
                 prosecutorAtDinner.BackColor = Color.FromArgb(64, 64, 64);
-                WriteMoves("Прокурор уехал");
+                getResult("Прокурор уехал");
             }
 
 

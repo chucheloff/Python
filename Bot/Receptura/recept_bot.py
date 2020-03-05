@@ -139,19 +139,20 @@ def load():
     log('loading...')
     with open('C:/Users/Tom/Documents/Python/Bot/Receptura/save.txt', 'r') as f:
         autosave = f.read().split('\n')
-        if autosave[0] == 'prosecutor_in_office = True':
-            prosecutor_in_office = True
-        else:
-            prosecutor_in_office = False
-        if autosave[1] == 'deputy_in_office = True':
-            deputy_in_office = True
-        else:
-            deputy_in_office = False
-        SERVICE_MESSAGE_ID = int(autosave[2].split(' ')[2])
-        if SERVICE_MESSAGE_ID == 0:
-            SERVICE_MESSAGE_EXISTS = False
-        else:
-            SERVICE_MESSAGE_EXISTS = True
+        if autosave[0] != '' and len(autosave) == 3:
+            if autosave[0] == 'prosecutor_in_office = True':
+                prosecutor_in_office = True
+            else:
+                prosecutor_in_office = False
+            if autosave[1] == 'deputy_in_office = True':
+                deputy_in_office = True
+            else:
+                deputy_in_office = False
+            SERVICE_MESSAGE_ID = int(autosave[2].split(' ')[2])
+            if SERVICE_MESSAGE_ID == 0:
+                SERVICE_MESSAGE_EXISTS = False
+            else:
+                SERVICE_MESSAGE_EXISTS = True
     # setting up logger
     # INFO for main events
     # on DEBUG level all the data that moves through program is duplicated
