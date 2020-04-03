@@ -11,8 +11,10 @@ namespace Recept
     {
         List<string> peoples = new List<string>();
         int deputyCount = 0, prosecutorCount = 0, deputyCountExt = 0, prosecutorCountExt = 0;
-        string[] deputy_info = new string[3];
-        string[] prosecutor_info = new string[3];
+
+        string[] deputy_info = new string[4];
+
+        string[] prosecutor_info = new string[4];
         List<string> deputy_list_box = new List<string>();
         List<string> prosecutor_list_box = new List<string>();
         List<string> deputy_text_box = new List<string>();
@@ -37,10 +39,18 @@ namespace Recept
         {
             try
             {
+                //defaults and blank write in file
                 deputy_info[0] = "зам";
+                // info[1] is about being in cabinet
                 deputy_info[1] = "-";
+                deputy_info[2] = "0";
+                // info[3] is about being in office
+                deputy_info[3] = "-";
                 prosecutor_info[0] = "шеф";
                 prosecutor_info[1] = "-";
+                prosecutor_info[2] = "0";
+                prosecutor_info[3] = "-";
+                WriteFile();
                 string pathFile = "Peoples.txt";
                 
                 if (System.IO.File.Exists(pathFile))
@@ -144,43 +154,40 @@ namespace Recept
 
         private void DeputyIsHere_CheckedChanged(object sender, EventArgs e)
         {
-            UpdateDeputyString(deputyIsHere.Checked);
             if (deputyIsHere.Checked)
             {
                 deputyIsHere.ForeColor = Color.Black;
                 deputyIsHere.BackColor = Color.FromArgb(25, 187, 155);
+                listBoxProsecutor.SetSelected(0, false);
+                deputy_info[1] = "+";
+
             }
             else
             {
                 deputyIsHere.ForeColor = Color.FromArgb(25, 187, 155);
                 deputyIsHere.BackColor = Color.FromArgb(64, 64, 64);
+                deputy_info[1] = "-";
             }
-
-            if (deputyIsHere.Checked)
-            {
-                listBoxProsecutor.SetSelected(0, false);
-            }
+            WriteFile();
         }
 
         private void ProsecutorIsHere_CheckedChanged(object sender, EventArgs e)
         {
-            UpdateProsecutorString(prosecutorIsHere.Checked);
             if (prosecutorIsHere.Checked)
             {
                 prosecutorIsHere.ForeColor = Color.Black;
                 prosecutorIsHere.BackColor = Color.FromArgb(25, 187, 155);
+                listBoxDeputy.SetSelected(0, false);
+                prosecutor_info[1] = "+";
             }
             else
             {
                 prosecutorIsHere.ForeColor = Color.FromArgb(25, 187, 155);
                 prosecutorIsHere.BackColor = Color.FromArgb(64, 64, 64);
+                prosecutor_info[1] = "-";
             }
+            WriteFile();
 
-
-            if (prosecutorIsHere.Checked)
-            {
-                listBoxDeputy.SetSelected(0, false);
-            }
         }
 
 
@@ -193,14 +200,16 @@ namespace Recept
                 deputyAtDinner.ForeColor = Color.Black;
                 deputyAtDinner.BackColor = Color.LawnGreen;
                 getResult("Заместитель приехал");
+                deputy_info[3] = "+";
             }
             else
             {
                 deputyAtDinner.ForeColor = Color.LawnGreen;
                 deputyAtDinner.BackColor = Color.FromArgb(64, 64, 64);
                 getResult("Заместитель уехал");
+                deputy_info[3] = "-";
             }
-
+            WriteFile();
         }
 
         
@@ -211,16 +220,16 @@ namespace Recept
                 prosecutorAtDinner.ForeColor = Color.Black;
                 prosecutorAtDinner.BackColor = Color.LawnGreen;
                 getResult("Прокурор приехал");
+                prosecutor_info[3] = "+";
             }
             else
             {
                 prosecutorAtDinner.ForeColor = Color.LawnGreen;
                 prosecutorAtDinner.BackColor = Color.FromArgb(64, 64, 64);
                 getResult("Прокурор уехал");
+                prosecutor_info[3] = "-";
             }
-
-
-
+            WriteFile();
         }
 
         
@@ -306,30 +315,31 @@ namespace Recept
                 }
                 prosecutor_text_box.Add(new_line);
             }
-            WriteFile();
-
             UpdateProsecutorCount();
+            WriteFile();
+            
         }
 
         
         // Count
         void UpdateDeputyCount()
         {
-            deputyCount = listBoxDeputy.SelectedItems.Count;
-
             // removing empty strings from count
-            int updatedDeputyCount = deputyCount;
-            for ( int i = 0; i < deputyCount; i++)
+            deputyCount = listBoxDeputy.SelectedItems.Count;
+            foreach (string str in listBoxDeputy.SelectedItems)
             {
-                if (listBoxDeputy.SelectedItems[i].ToString() == "")
+                if (str.Equals(""))
                 {
-                    updatedDeputyCount -= 1;
+                    deputyCount -= 1;
                 }
             }
-            deputyCount = updatedDeputyCount;
 
+            // add things up
             labelDeputyCount.Text = (deputyCount + deputyCountExt) + " чел";
+            deputy_info[2] = (deputyCount + deputyCountExt).ToString();
+            WriteFile();
 
+            // visuals
             if ((deputyCount + deputyCountExt) > 0)
             {
                 labelDeputyCount.ForeColor = Color.Black;
@@ -340,27 +350,27 @@ namespace Recept
                 labelDeputyCount.ForeColor = Color.FromArgb(25, 187, 155);
                 labelDeputyCount.BackColor = Color.FromArgb(64, 64, 64);
             }
-            deputy_info[2] = (deputyCount + deputyCountExt).ToString();
-            WriteFile();
+            
         }
 
         void UpdateProsecutorCount()
         {
-            prosecutorCount = listBoxProsecutor.SelectedItems.Count;
-
             // removing empty strings from count
-            int updatedProsecutorCount = prosecutorCount;
-            for ( int i = 0; i< prosecutorCount; i++)
+            prosecutorCount = listBoxProsecutor.SelectedItems.Count;
+            foreach (string str in listBoxProsecutor.SelectedItems)
             {
-                if (listBoxProsecutor.SelectedItems[i].ToString() == "")
+                if (str.Equals(""))
                 {
-                    updatedProsecutorCount -= 1;
-                }
+                    prosecutorCount -= 1;
+                }  
             }
 
-            prosecutorCount = updatedProsecutorCount;
-
+            // add things up
             labelProsecutorCount.Text = (prosecutorCount + prosecutorCountExt) + " чел";
+            prosecutor_info[2] = (prosecutorCount + prosecutorCountExt).ToString();
+            WriteFile();
+
+            // visuals
             if ((prosecutorCount + prosecutorCountExt) > 0)
             {
                 labelProsecutorCount.ForeColor = Color.Black;
@@ -371,8 +381,7 @@ namespace Recept
                 labelProsecutorCount.ForeColor = Color.FromArgb(25, 187, 155);
                 labelProsecutorCount.BackColor = Color.FromArgb(64, 64, 64);
             }
-            prosecutor_info[2] = (prosecutorCount + prosecutorCountExt).ToString();
-            WriteFile();
+            
         }
 
         
@@ -395,6 +404,7 @@ namespace Recept
             {
                 deputy_list_box.Add(listBoxDeputy.SelectedItems[i].ToString());
             }
+            UpdateDeputyCount();
             WriteFile();
         }
 
@@ -416,31 +426,7 @@ namespace Recept
             {
                prosecutor_list_box.Add(listBoxProsecutor.SelectedItems[i].ToString());
             }
-            WriteFile();
-        }
-
-        private void UpdateDeputyString(bool v)
-        {
-            if (v)
-            {
-                deputy_info[1] = "+";
-            }
-            else
-            {
-                deputy_info[1] = "-";
-            }
-            WriteFile();
-        }
-        private void UpdateProsecutorString(bool v)
-        {
-            if (v)
-            {
-                prosecutor_info[1] = "+";
-            }
-            else
-            {
-                prosecutor_info[1] = "-";
-            }
+            UpdateProsecutorCount();
             WriteFile();
         }
 
@@ -468,6 +454,7 @@ namespace Recept
         private void WriteFile()
         {
             string final_string = "";
+
             foreach (string word in deputy_info)
             {
                 final_string += word + "\n";
@@ -493,6 +480,7 @@ namespace Recept
             {
                 final_string += word + "\n";
             }
+
             File.WriteAllText("recept_info.txt", final_string);
         }
 

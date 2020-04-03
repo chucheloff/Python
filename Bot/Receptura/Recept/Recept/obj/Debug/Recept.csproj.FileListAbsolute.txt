@@ -10,3 +10,13 @@ C:\Users\Tom\Documents\Python\Bot\Receptura\Recept\Recept\obj\Debug\Recept.cspro
 C:\Users\Tom\Documents\Python\Bot\Receptura\Recept\Recept\obj\Debug\Recept.csproj.CopyComplete
 C:\Users\Tom\Documents\Python\Bot\Receptura\Recept\Recept\obj\Debug\Recept.exe
 C:\Users\Tom\Documents\Python\Bot\Receptura\Recept\Recept\obj\Debug\Recept.pdb
+C:\Users\Tom\Documents\Python\Bot\Receptura\Recept\Recept\bin\Debug\Microsoft.Toolkit.Uwp.Notifications.dll
+C:\Users\Tom\Documents\Python\Bot\Receptura\Recept\Recept\bin\Debug\QueryString.NETCore.dll
+C:\Users\Tom\Documents\Python\Bot\Receptura\Recept\Recept\bin\Debug\System.Security.Principal.Windows.dll
+C:\Users\Tom\Documents\Python\Bot\Receptura\Recept\Recept\bin\Debug\System.ValueTuple.dll
+C:\Users\Tom\Documents\Python\Bot\Receptura\Recept\Recept\bin\Debug\Microsoft.Toolkit.Uwp.Notifications.pdb
+C:\Users\Tom\Documents\Python\Bot\Receptura\Recept\Recept\bin\Debug\Microsoft.Toolkit.Uwp.Notifications.xml
+C:\Users\Tom\Documents\Python\Bot\Receptura\Recept\Recept\bin\Debug\QueryString.NETCore.pdb
+C:\Users\Tom\Documents\Python\Bot\Receptura\Recept\Recept\bin\Debug\QueryString.NETCore.xml
+C:\Users\Tom\Documents\Python\Bot\Receptura\Recept\Recept\bin\Debug\System.Security.Principal.Windows.xml
+C:\Users\Tom\Documents\Python\Bot\Receptura\Recept\Recept\bin\Debug\System.ValueTuple.xml

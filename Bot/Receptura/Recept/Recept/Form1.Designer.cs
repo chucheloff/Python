@@ -135,18 +135,19 @@
             this.listBoxProsecutor.ItemHeight = 30;
             this.listBoxProsecutor.Items.AddRange(new object[] {
             "Заместитель",
-            "Трепилов",
-            "Токарев",
-            "Сапожников",
-            "Решетов",
-            "Стыров",
-            "Калугин",
-            "Крылов",
-            "Иванов",
+            "к-н Триполев",
+            "к-н Токарев",
+            "л-т Сапожников",
+            "л-т Решетов",
+            "л-т Стыров",
+            "ст. л-т Гревцев","",
+            "ст. л-т Калугин",
+            "ст. с-т Крылов",
             "",
             "Кочергина",
             "Каташова",
-            "Тарабарина"});
+            "Тарабарина",
+            "Петрова"});
             this.listBoxProsecutor.Location = new System.Drawing.Point(261, 63);
             this.listBoxProsecutor.Name = "listBoxProsecutor";
             this.listBoxProsecutor.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
