@@ -174,7 +174,7 @@ def get_info():
                     item = rank_it(item)
                     deputy_result += '\n' + item
     else:
-        deputy_result += 'Заместитель не в конторе'
+        deputy_result += 'не в конторе'
         for item in list_of_deputy:
                 item = rank_it(item)
                 deputy_result += '\n' + item
@@ -204,7 +204,7 @@ def get_info():
                     item = rank_it(item)
                     prosecutor_result += '\n' + item
     else:
-        prosecutor_result += 'Прокурор не в конторе'
+        prosecutor_result += 'не в конторе'
         for item in list_of_prosecutor:
                     item = rank_it(item)
                     prosecutor_result += '\n' + item
