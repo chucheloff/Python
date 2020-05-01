@@ -1,3 +1,3 @@
 prosecutor_in_office = False
-deputy_in_office = True
-SERVICE_MESSAGE_ID = 154388
+deputy_in_office = False
+SERVICE_MESSAGE_ID = 182296
