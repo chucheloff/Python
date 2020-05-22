@@ -209,9 +209,8 @@ def get_info():
                     item = rank_it(item)
                     prosecutor_result += '\n' + item
 
-
-    return deputy_result, prosecutor_result
     save()
+    return deputy_result, prosecutor_result
 
 
 def rank_it(name):
