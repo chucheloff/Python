@@ -48,7 +48,7 @@ from functools import wraps
 userbase = []
 userdelete = []
 SERVICE_MESSAGE_EXISTS = False
-LIST_OF_ADMINS = [548993]
+LIST_OF_ADMINS = [640200905]
 SERVICE_MESSAGE_ID = 0
 deputy_in_office = False
 prosecutor_in_office = False
@@ -68,7 +68,6 @@ ranked_dict = {
 'мл л-т' : '⋆',
 'мл. л-т' : '⋆',
 'ст пр-к' : '⭒⭒⭒',
-'ст. пр-к' : '⭒⭒⭒',
 'пр-к' : '⭒⭒',
 'мл пр-к' : '⭒',
 'ст с-т' : '▮',
@@ -209,9 +208,8 @@ def get_info():
                     item = rank_it(item)
                     prosecutor_result += '\n' + item
 
-
-    return deputy_result, prosecutor_result
     save()
+    return deputy_result, prosecutor_result
 
 
 def rank_it(name):
@@ -224,7 +222,6 @@ def rank_it(name):
     elif name == 'Заместитель':
             return ranked_dict['м-р'] + ' ' + lame
     elif ' ' in name:
-        words = name.split(' ')
         for key in ranked_dict:
             if (key in name) and (key not in name[name.find(' '):]) :  
                     return ranked_dict[key] + ' ' + lame
@@ -828,7 +825,7 @@ def main():
 
     # testbot token : 986575172:AAHAppjUU5zdld-9tHb2ZlHs2Y43WWOKLkI
     # main release bot token : 1050540100:AAES5K5asAlvQdB1BjhlFDJEvaCf3COFF_A
-    # baldie id = 22423968 | my id = 548993
+    # admin id = 640200905
     TOKEN = "1050540100:AAES5K5asAlvQdB1BjhlFDJEvaCf3COFF_A"
 
     # proxy is private one from barry's last job office, so it's a long overdue also

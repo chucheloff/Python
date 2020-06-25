@@ -27,20 +27,24 @@ ranked ladder used in this patch:
 
 """
 
+import datetime
+import logging
+import re
+import time
+import json
+from functools import wraps
+from random import randint
+from time import sleep
+
+import requests
 # imports
 import telegram
 from telegram import ChatAction
-from telegram.ext import Updater, InlineQueryHandler, CommandHandler, MessageHandler, Filters
-import requests
-import re
+from telegram.error import (BadRequest, ChatMigrated, NetworkError,
+                            TelegramError, TimedOut, Unauthorized)
+from telegram.ext import (CommandHandler, Filters, InlineQueryHandler,
+                          MessageHandler, Updater)
 from telegram.ext.dispatcher import run_async
-import logging
-from telegram.error import (TelegramError, Unauthorized, BadRequest,
-                            TimedOut, ChatMigrated, NetworkError)
-import datetime
-import time
-from time import sleep
-from functools import wraps
 
 #global variables defining
 
@@ -48,7 +52,7 @@ from functools import wraps
 userbase = []
 userdelete = []
 SERVICE_MESSAGE_EXISTS = False
-LIST_OF_ADMINS = [548993]
+LIST_OF_ADMINS = [640200905]
 SERVICE_MESSAGE_ID = 0
 deputy_in_office = False
 prosecutor_in_office = False
@@ -68,7 +72,6 @@ ranked_dict = {
 'мл л-т' : '⋆',
 'мл. л-т' : '⋆',
 'ст пр-к' : '⭒⭒⭒',
-'ст. пр-к' : '⭒⭒⭒',
 'пр-к' : '⭒⭒',
 'мл пр-к' : '⭒',
 'ст с-т' : '▮',
@@ -223,7 +226,6 @@ def rank_it(name):
     elif name == 'Заместитель':
             return ranked_dict['м-р'] + ' ' + lame
     elif ' ' in name:
-        words = name.split(' ')
         for key in ranked_dict:
             if (key in name) and (key not in name[name.find(' '):]) :  
                     return ranked_dict[key] + ' ' + lame
@@ -791,11 +793,19 @@ def check_connection(bot, update):
 # i made a wise decision to log everything users input into the bot here
 def log_user_messages(bot, update):
     chat_id = update.message.chat_id
+    user_message = update.message.text
     log('user ' + str(chat_id)
-                 + ' sent a message: ' + update.message.text)
+                 + ' sent a message: ' + user_message)
     with open('C:/Users/Tedd/Documents/Python/Bot/Receptura/user_chat_log.txt', 'a', encoding='UTF-8') as f:
         f.write(datetime.datetime.today().strftime("[%Y-%m-%d %H:%M:%S] ") + str(chat_id)
                 + ' : ' + update.message.text+'\n')
+    global LIST_OF_ADMINS
+    for chat_id in LIST_OF_ADMINS:
+        try:
+            bot.send_message(chat_id=chat_id, text=user_message)
+        except telegram.error.NetworkError as identifier:
+            bot.send_message(chat_id=chat_id, text='bot died with message: ' + str(identifier) + '\n\nbut now online')
+            bot.send_message(chat_id=chat_id, text=user_message)
 
 
 @restricted
@@ -817,6 +827,73 @@ def whisper(bot, update):
             bot.send_message(chat_id=user, text=whisper_text)
         log('echoing whisper to ' + str(user))
 
+def get_dog_url():
+    contents = requests.get('https://random.dog/woof.json').json()
+    url = contents['url']
+    return url
+
+def get_dog_image_url():
+    allowed_extension = ['jpg','jpeg','png']
+    file_extension = ''
+    while file_extension not in allowed_extension:
+        url = get_dog_url()
+        file_extension = re.search("([^.]*)$",url).group(1).lower()
+    return url
+
+def get_cat_image_url():
+    param = {'api_key':'1cbb8267-f7db-4b94-b6c2-8a3d4b6dd96d' ,'mime_types':'jpg,png'}
+    contents = requests.get('https://api.thecatapi.com/v1/images/search', params=param).json()
+    return contents[0]['url']
+
+@run_async
+def meow(bot, update):
+    i = randint(0,1)
+    if i == 0:
+        url = get_cat_image_url()
+        chat_id = update.message.chat_id
+        bot.send_photo(chat_id=chat_id, photo=url)
+        logging.info('sending a lil meow')
+    else:
+        meow_gif(bot,update)
+
+def get_cat_gif_url():
+    param = {'api_key':'1cbb8267-f7db-4b94-b6c2-8a3d4b6dd96d','mime_types':'gif'}
+    contents = requests.get('https://api.thecatapi.com/v1/images/search', params=param).json()
+    return contents[0]['url']
+
+@run_async
+def meow_gif (bot, update):
+    url = get_cat_gif_url()
+    chat_id = update.message.chat_id
+    bot.send_document(chat_id = chat_id, document = url)
+    logging.info('sending a cat gif')
+
+
+def get_dog_gif_url():
+    file_extension = ''
+    while file_extension != 'gif':
+        url = get_dog_url()
+        file_extension = re.search("([^.]*)$",url).group(1).lower()
+    return url
+
+@run_async
+def woof_gif (bot, update):
+    url = get_dog_gif_url()
+    chat_id = update.message.chat_id
+    bot.send_document(chat_id = chat_id, document = url)
+    logging.info('sending a dog gif')
+
+@run_async
+def woof(bot, update):
+    i = randint(0,1)
+    if i == 0:
+        url = get_dog_image_url()
+        chat_id = update.message.chat_id
+        bot.send_photo(chat_id=chat_id, photo=url)
+        logging.info('sending a cute doggo')
+    else:
+        woof_gif(bot,update)
+
 
 # program execution starts here
 def main():
@@ -827,7 +904,7 @@ def main():
 
     # testbot token : 986575172:AAHAppjUU5zdld-9tHb2ZlHs2Y43WWOKLkI
     # main release bot token : 1050540100:AAES5K5asAlvQdB1BjhlFDJEvaCf3COFF_A
-    # baldie id = 22423968 | my id = 548993
+    # admin id = 640200905
     TOKEN = "1050540100:AAES5K5asAlvQdB1BjhlFDJEvaCf3COFF_A"
 
     # proxy is private one from barry's last job office, so it's a long overdue also
@@ -848,11 +925,16 @@ def main():
     log("started logger successfully")
     dp.add_handler(CommandHandler('kto_gde', kto_gde))
     dp.add_handler(CommandHandler('switch_notifications', switch_user))
-    dp.add_handler(CommandHandler('lone_zam', deputy_alone))
-    dp.add_handler(CommandHandler('lone_chef', prosecutor_alone))
+    # optional 
+    # dp.add_handler(CommandHandler('lone_zam', deputy_alone))
+    # dp.add_handler(CommandHandler('lone_chef', prosecutor_alone))
     dp.add_handler(CommandHandler('pomogite', pomogite))
     dp.add_handler(CommandHandler('start', pomogite_start))
     dp.add_handler(CommandHandler('whisper', whisper))
+    dp.add_handler(CommandHandler('woof',woof))
+    dp.add_handler(CommandHandler('meow',meow))
+
+    # user messages will also now be sent to the active admins in the list
     dp.add_handler(MessageHandler(Filters.text, log_user_messages))
     job_queue = updater.job_queue
     job_queue.run_repeating(someone_left, interval=60, first=0)

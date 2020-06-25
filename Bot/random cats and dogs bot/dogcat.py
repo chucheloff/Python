@@ -3,6 +3,7 @@ import requests
 import re
 from telegram.ext.dispatcher import run_async
 import logging
+import json
 
 logging.basicConfig(level=logging.INFO)
 logging.info('lets start this new adventure')
@@ -20,21 +21,14 @@ def get_dog_image_url():
         file_extension = re.search("([^.]*)$",url).group(1).lower()
     return url
 
-def get_cat_url():
-    contents = requests.get('https://aws.random.cat/meow').json()
-    url = contents['file']
-    return url
-
 def get_cat_image_url():
-    allowed_extension = ['jpg','jpeg','png']
-    file_extension = ''
-    while file_extension not in allowed_extension:
-        url = get_cat_url()
-        file_extension = re.search("([^.]*)$",url).group(1).lower()
-    return url
+    param = {'api_key':'1cbb8267-f7db-4b94-b6c2-8a3d4b6dd96d' ,'mime_types':'jpg,png'}
+    contents = requests.get('https://api.thecatapi.com/v1/images/search', params=param).json()
+    return contents[0]['url']
 
 @run_async
 def meow(bot, update):
+
     logging.debug('requesting cat image url')
     url = get_cat_image_url()
     chat_id = update.message.chat_id
@@ -42,11 +36,9 @@ def meow(bot, update):
     logging.info('sending a lil meow')
 
 def get_cat_gif_url():
-    file_extension = ''
-    while file_extension != 'gif':
-        url = get_cat_url()
-        file_extension = re.search("([^.]*)$",url).group(1).lower()
-    return url
+    param = {'api_key':'1cbb8267-f7db-4b94-b6c2-8a3d4b6dd96d','mime_types':'gif'}
+    contents = requests.get('https://api.thecatapi.com/v1/images/search', params=param).json()
+    return contents[0]['url']
 
 @run_async
 def meow_gif (bot, update):
@@ -93,8 +85,6 @@ def main():
 
     logging.info("started logger successfully")
     dp.add_handler(CommandHandler('woof',woof))
-
-
     dp.add_handler(CommandHandler('woof_gif',woof_gif))
     dp.add_handler(CommandHandler('meow_gif', meow_gif))
     dp.add_handler(CommandHandler('meow',meow))
