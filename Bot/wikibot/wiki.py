@@ -10,14 +10,15 @@ import random
 
 query = ''
 music_related_syntax = ''
-f =  open('C://Users/Tom/Documents/Python/Bot/wikibot/words_alpha.txt', encoding = 'UTF-8')
+f =  open('C:/Users/chuch/Documents/GitHub/Python/Bot/wikibot/words_alpha.txt', encoding = 'UTF-8')
 valid_words = f.read().split()
-f = open('C://Users/Tom/Documents/Python/Bot/wikibot/query.txt', encoding = 'UTF-8')
+f = open('C:/Users/chuch/Documents/GitHub/Python/Bot/wikibot/query.txt', encoding = 'UTF-8')
 query = f.read()
 music_related_syntax = query.split('\n')
 print('searching for: ' + str(music_related_syntax))
 english_words = valid_words
 print(len(english_words))
+
 
 def get_result(mediawiki, search_phrase):
     search_result = search_pages.get_search(search_phrase)
@@ -35,6 +36,7 @@ def get_result(mediawiki, search_phrase):
     else:
         return None
 
+
 def related(categories):
     # TO_DO ADVANCED SEARCH
     entries_count = 0
@@ -47,6 +49,7 @@ def related(categories):
         return True
     else:
         return False
+
 
 def get_final_page():
     mediawiki = MediaWiki(user_agent='chucha-user-agent-string')
@@ -61,7 +64,7 @@ def get_final_page():
     print(page.url)
     return page
 
-@run_async
+
 def read(bot, update):
     print('new user request')
     chat_id = update.message.chat_id
