@@ -112,7 +112,7 @@ def get_info():
     prosecutor_on_duty = False
     s = f.read().split('\n')
     f.close()
-    # print(s)
+    
     if s[1] == '+':
         deputy_on_duty = True
     else:
@@ -837,7 +837,7 @@ def main():
         }
     }
 
-    # magic only god knows how it's working
+    # necessary preparations for server launch
     updater = Updater(TOKEN, request_kwargs=REQUEST_KWARGS, workers=30)
     dp = updater.dispatcher
     dp.add_error_handler(error_callback)
